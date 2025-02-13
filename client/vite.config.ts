@@ -6,4 +6,12 @@ export default defineConfig({
   plugins: [react()
     , tailwindcss()
   ],
+  resolve: {
+    alias: {
+      src: "/src",
+      components: "/src/components",
+      assets: "/src/assets",
+      lib: "/src/lib",
+    },
+  },
 })
