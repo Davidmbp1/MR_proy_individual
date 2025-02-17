@@ -1,39 +1,25 @@
 // server/src/models/User.ts
-
 import { Schema, model, Document } from 'mongoose';
 
-// Interfaz del documento de usuario en TS
 export interface IUser extends Document {
   email: string;
-  password: string;
+  password?: string; // opcional si usa Google
   name?: string;
+  googleId?: string;
   role: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Definimos el esquema
 const userSchema = new Schema<IUser>(
   {
-    email: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String
-    },
-    role: {
-      type: String,
-      default: 'client'  // Roles posibles: "client", "business", "admin"
-    }
+    email: { type: String, required: true, unique: true },
+    password: { type: String },
+    name: { type: String },
+    googleId: { type: String }, 
+    role: { type: String, default: 'client' }
   },
-  { timestamps: true } // Crea createdAt y updatedAt automáticamente
+  { timestamps: true }
 );
 
-// Exportamos el modelo "User" basado en userSchema
 export default model<IUser>('User', userSchema);

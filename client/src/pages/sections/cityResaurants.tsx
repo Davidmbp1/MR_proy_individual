@@ -1,3 +1,4 @@
+// client/src/pages/sections/CityRestaurants.tsx
 import { RegionCard } from "../../components/regionCard";
 
 const regions = [
@@ -14,14 +15,14 @@ const regions = [
 
 export const CityRestaurants = () => {
   return (
-    <section className="flex flex-col items-center justify-center max-w-6xl mx-auto gap-y-16 py-16">
-      <h2 className="text-center text-5xl text-blue-950 font-bold brightness-125">City Restaurants</h2>
-      <div className="grid grid-cols-4 gap-6">
-      {
-        regions.map((region, index) => (
+    <section className="flex flex-col items-center justify-center max-w-6xl mx-auto gap-y-10 py-16 px-4">
+      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl text-blue-950 font-bold brightness-125">
+        City Restaurants
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {regions.map((region, index) => (
           <RegionCard key={index} region={region.region} img={region.img} />
-        ))
-      }
+        ))}
       </div>
     </section>
   )

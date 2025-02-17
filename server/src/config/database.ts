@@ -1,3 +1,4 @@
+// server/src/config/database.ts
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -10,7 +11,7 @@ export const connectDB = async () => {
     await mongoose.connect(MONGODB_URI);
     console.log('Conectado a MongoDB Atlas con Mongoose');
   } catch (error) {
-    console.error('Error de conexión a MongoDB:', error);
-    process.exit(1);
+    console.error('Error al conectar con MongoDB:', error);
+    process.exit(1); // O comentarlo si no quieres matar el servidor en error
   }
 };
