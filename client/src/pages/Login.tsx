@@ -1,11 +1,13 @@
 // client/src/pages/Login.tsx
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import OneTapGoogle from '../components/OneTapGoogle'
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -15,9 +17,12 @@ function Login() {
     e.preventDefault()
     setMessage('')
     try {
-      const res = await axios.post('http://localhost:4000/api/auth/login', form)
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, form)
       setMessage(res.data.message)
+      // Guardar token
       localStorage.setItem('token', res.data.token)
+      // Redirigir a home o complete-profile
+      navigate('/')
     } catch (err: any) {
       setMessage(err.response?.data?.message || 'Error en login')
     }
@@ -52,8 +57,8 @@ function Login() {
       </form>
       {message && <p className="mt-4 text-red-600">{message}</p>}
 
-      <p className="mt-6">O ingresa con tu cuenta de Google:</p>
-      <OneTapGoogle />
+      <p className="mt-6">O ingresa con Google:</p>
+      <OneTapGoogle redirectUrl="/" />
     </div>
   )
 }

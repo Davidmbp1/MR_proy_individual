@@ -1,10 +1,10 @@
-// server/src/index.ts
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
+import userRoutes from './routes/user.routes';  // <-- Import userRoutes
 import logger from './config/logger';
 
 dotenv.config();
@@ -12,7 +12,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 
 async function main() {
-  await connectDB(); // conecta a MongoDB
+  await connectDB(); // Conecta a MongoDB
 
   const app = express();
   app.use(helmet());
@@ -21,6 +21,9 @@ async function main() {
 
   // Rutas de autenticación
   app.use('/api/auth', authRoutes);
+
+  // Rutas de usuario (profile)
+  app.use('/api/users', userRoutes);
 
   // Ruta de prueba
   app.get('/', (req, res) => {

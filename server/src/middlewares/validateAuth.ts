@@ -14,34 +14,28 @@ const loginSchema = z.object({
   password: z.string().min(8)
 });
 
-// Middleware de validación para registro
 export const validateRegister: RequestHandler = (req, res, next) => {
   try {
     registerSchema.parse(req.body);
-    // Si pasa la validación, continuamos
     next();
   } catch (error: any) {
-    // Si la validación falla, enviamos un error y retornamos
     res.status(400).json({
       message: 'Datos de registro inválidos',
       errors: error.errors
     });
-    return; // <--- Retorna void
+    return;
   }
 };
 
-// Middleware de validación para login
 export const validateLogin: RequestHandler = (req, res, next) => {
   try {
     loginSchema.parse(req.body);
-    // Si pasa la validación, continuamos
     next();
   } catch (error: any) {
-    // Si la validación falla, enviamos un error y retornamos
     res.status(400).json({
       message: 'Datos de login inválidos',
       errors: error.errors
     });
-    return; // <--- Retorna void
+    return;
   }
 };

@@ -3,7 +3,7 @@ import User from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
-import logger from '../config/logger';  // <-- Importamos Winston logger
+import logger from '../config/logger';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret-dev';
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
@@ -31,7 +31,13 @@ export const register: RequestHandler = async (req, res) => {
       name
     });
 
-    // Log de éxito con Winston
+    // Generar token (mantener logueado)
+    const token = jwt.sign(
+      { userId: newUser._id, role: newUser.role },
+      JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
     logger.info(`Usuario registrado: ${newUser._id} (${newUser.email})`);
 
     res.status(201).json({
@@ -39,11 +45,11 @@ export const register: RequestHandler = async (req, res) => {
       user: {
         id: newUser._id,
         email: newUser.email
-      }
+      },
+      token // Retornamos el JWT
     });
     return; 
   } catch (error) {
-    // Log de error con Winston
     logger.error('Error en register:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
     return;
@@ -81,7 +87,6 @@ export const login: RequestHandler = async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    // Log de éxito
     logger.info(`Usuario logueado: ${user._id} (${user.email})`);
 
     res.json({
@@ -129,6 +134,10 @@ export const googleLogin: RequestHandler = async (req, res) => {
       });
     } else if (!user.googleId) {
       user.googleId = sub || '';
+      // Asignar name si no tiene
+      if (!user.name && name) {
+        user.name = name;
+      }
       await user.save();
     }
 
@@ -139,7 +148,6 @@ export const googleLogin: RequestHandler = async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    // Log de éxito
     logger.info(`Usuario Google login: ${user._id} (${user.email})`);
 
     res.json({

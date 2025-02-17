@@ -1,5 +1,6 @@
 // client/src/components/OneTapGoogle.tsx
-import React, { useEffect } from 'react'
+// client/src/components/OneTapGoogle.tsx
+import { useEffect } from 'react'
 import axios from 'axios'
 
 declare global {
@@ -9,7 +10,7 @@ declare global {
 }
 
 interface Props {
-  redirectUrl?: string; // a dónde redirigir tras login
+  redirectUrl?: string
 }
 
 function OneTapGoogle({ redirectUrl }: Props) {
@@ -18,11 +19,8 @@ function OneTapGoogle({ redirectUrl }: Props) {
   const handleCredentialResponse = async (response: any) => {
     const token = response.credential
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/google`, 
-        { token }
-      )
-      // Guardar JWT
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/google`, { token })
+      // Guardar token
       localStorage.setItem('token', res.data.token)
       alert(res.data.message)
       // Redirigir
@@ -30,7 +28,7 @@ function OneTapGoogle({ redirectUrl }: Props) {
         window.location.href = redirectUrl
       }
     } catch (error) {
-      console.error('Error en login con Google:', error)
+      console.error('Error en Google login:', error)
     }
   }
 
@@ -42,9 +40,9 @@ function OneTapGoogle({ redirectUrl }: Props) {
         auto_select: false,
         cancel_on_tap_outside: true
       })
-      // One Tap
+      // Modo One Tap
       window.google.accounts.id.prompt()
-      // Botón
+      // Renderizar botón
       window.google.accounts.id.renderButton(
         document.getElementById('googleButtonDiv'),
         { theme: "outline", size: "large" }
@@ -54,7 +52,7 @@ function OneTapGoogle({ redirectUrl }: Props) {
 
   return (
     <div className="flex flex-col items-center mt-4">
-      <div id="googleButtonDiv" className="mt-4" />
+      <div id="googleButtonDiv" />
     </div>
   )
 }
