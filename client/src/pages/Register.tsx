@@ -18,7 +18,7 @@ function Register() {
     setMessage('')
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         form
       )
       setMessage(res.data.message)
@@ -66,6 +66,7 @@ function Register() {
           Registrarse
         </button>
       </form>
+
       {message && <p className="mt-4 text-red-600">{message}</p>}
 
       <p className="mt-6">O regístrate con Google:</p>

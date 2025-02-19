@@ -1,5 +1,5 @@
 // client/src/components/OneTapGoogle.tsx
-// client/src/components/OneTapGoogle.tsx
+
 import { useEffect } from 'react'
 import axios from 'axios'
 
@@ -19,10 +19,15 @@ function OneTapGoogle({ redirectUrl }: Props) {
   const handleCredentialResponse = async (response: any) => {
     const token = response.credential
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/google`, { token })
+      // OJO: Usar VITE_BACKEND_URL
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+        { token }
+      )
       // Guardar token
       localStorage.setItem('token', res.data.token)
       alert(res.data.message)
+
       // Redirigir
       if (redirectUrl) {
         window.location.href = redirectUrl

@@ -1,17 +1,22 @@
 // client/src/pages/Home.tsx
 
-import { StepGuide } from "../components/ui/stepGuide"
-import { Hero } from "./sections/Hero"
-import { CityRestaurants } from "./sections/cityResaurants"
-import { Story } from "./sections/story"
+// Import de tus secciones
+import HeroMain from './home_sections/HeroMain'
+import { StepGuide } from '../components/ui/stepGuide' // Import nombrado
+import { CityRestaurants } from './home_sections/cityResaurants'
+import CommunityCTA from './home_sections/CommunityCTA'
+import StorySection from './home_sections/StorySection'
+import FooterSection from './home_sections/FooterSection'
 
 function Home() {
   return (
     <div className="flex flex-col">
-      <Hero />
+      <HeroMain />
       <StepGuide />
       <CityRestaurants />
-      <Story />
+      <CommunityCTA />
+      <StorySection />
+      <FooterSection />
     </div>
   )
 }

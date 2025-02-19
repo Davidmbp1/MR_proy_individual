@@ -17,11 +17,14 @@ function Login() {
     e.preventDefault()
     setMessage('')
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, form)
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, 
+        form
+      )
       setMessage(res.data.message)
       // Guardar token
       localStorage.setItem('token', res.data.token)
-      // Redirigir a home o complete-profile
+      // Redirigir a home o complete-profile, depende de tu lógica
       navigate('/')
     } catch (err: any) {
       setMessage(err.response?.data?.message || 'Error en login')
@@ -55,6 +58,7 @@ function Login() {
           Ingresar
         </button>
       </form>
+
       {message && <p className="mt-4 text-red-600">{message}</p>}
 
       <p className="mt-6">O ingresa con Google:</p>

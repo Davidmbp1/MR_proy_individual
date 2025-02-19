@@ -1,4 +1,5 @@
 // client/src/pages/CompleteProfile.tsx
+
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -12,24 +13,24 @@ function CompleteProfile() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Obtenemos el JWT del localStorage
     const token = localStorage.getItem('token')
     if (!token) {
       setMessage('No estás autenticado. Por favor inicia sesión.')
       return
     }
+
     try {
       setMessage('')
-      // Llamar a tu backend para guardar estos datos en el usuario
+      // Llamar a tu backend /api/users/profile
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/users/profile`,
-        { 
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/profile`,
+        {
           promoCode: promo,
           agreeTerms: agreeTos,
           contactPermission
         },
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`
           }
         }
@@ -46,20 +47,18 @@ function CompleteProfile() {
     <div className="flex flex-col md:flex-row">
       {/* Lado Izquierdo: formulario */}
       <div className="w-full md:w-1/2 p-8">
-        <button 
-          onClick={() => navigate('/')} 
+        <button
+          onClick={() => navigate('/')}
           className="text-sm text-blue-600 underline mb-4"
         >
           &larr; Back to home
         </button>
         <h2 className="text-3xl font-bold mb-6">Sign In</h2>
-        
-        {/* Botón de Google (opcional). Podrías re-usa OneTapGoogle */}
-        <button 
+
+        {/* Botón de Google (opcional) */}
+        <button
           className="bg-white border border-gray-400 px-4 py-2 rounded hover:bg-gray-200 mb-6"
         >
-          {/* Podrías integrar OneTapGoogle aquí, 
-              pero ya lo usamos en /login. Tu decides. */}
           Google
         </button>
 
@@ -84,14 +83,17 @@ function CompleteProfile() {
           We want you to know exactly how our service works ...
         </p>
         <div className="flex items-center mb-4">
-          <input 
-            type="checkbox" 
+          <input
+            type="checkbox"
             checked={agreeTos}
             onChange={() => setAgreeTos(!agreeTos)}
             className="mr-2"
           />
           <label className="text-sm">
-            I agree to the <a href="#" className="text-blue-700 underline">terms and conditions</a>
+            I agree to the{' '}
+            <a href="#" className="text-blue-700 underline">
+              terms and conditions
+            </a>
           </label>
         </div>
 
@@ -101,22 +103,26 @@ function CompleteProfile() {
           We’d love to email you free booking credit coupons ...
         </p>
         <div className="flex gap-2 items-center mb-4">
-          <input 
-            type="radio" 
-            id="contactYes" 
-            checked={contactPermission === 'yes'} 
-            onChange={() => setContactPermission('yes')} 
+          <input
+            type="radio"
+            id="contactYes"
+            checked={contactPermission === 'yes'}
+            onChange={() => setContactPermission('yes')}
           />
-          <label htmlFor="contactYes" className="text-sm">Yes, send me news and promotions</label>
+          <label htmlFor="contactYes" className="text-sm">
+            Yes, send me news and promotions
+          </label>
         </div>
         <div className="flex gap-2 items-center mb-4">
-          <input 
-            type="radio" 
-            id="contactNo" 
-            checked={contactPermission === 'no'} 
-            onChange={() => setContactPermission('no')} 
+          <input
+            type="radio"
+            id="contactNo"
+            checked={contactPermission === 'no'}
+            onChange={() => setContactPermission('no')}
           />
-          <label htmlFor="contactNo" className="text-sm">No thanks (not recommended)</label>
+          <label htmlFor="contactNo" className="text-sm">
+            No thanks (not recommended)
+          </label>
         </div>
 
         {/* Botones */}
@@ -137,19 +143,17 @@ function CompleteProfile() {
           </button>
         </div>
 
-        {message && (
-          <p className="mt-4 text-red-600">{message}</p>
-        )}
+        {message && <p className="mt-4 text-red-600">{message}</p>}
       </div>
 
       {/* Lado derecho: Imagen, texto decorativo */}
-      <div 
+      <div
         className="hidden md:block md:w-1/2 bg-cover bg-center"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1552566626-52f8b828add9")'
+          backgroundImage:
+            'url("https://images.unsplash.com/photo-1552566626-52f8b828add9")'
         }}
       >
-        {/* Podrías poner un overlay y texto */}
         <div className="w-full h-full bg-black bg-opacity-40 flex items-center justify-center text-white p-8">
           <h2 className="text-3xl font-bold text-center">
             There’s never been a better time to tuck in

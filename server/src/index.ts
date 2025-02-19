@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
-import userRoutes from './routes/user.routes';  // <-- Import userRoutes
+import userRoutes from './routes/user.routes';
 import logger from './config/logger';
 
 dotenv.config();
@@ -16,7 +16,11 @@ async function main() {
 
   const app = express();
   app.use(helmet());
-  app.use(cors());
+  // Ajusta el "origin" según tu setup en el frontend
+  app.use(cors({ 
+    origin: ['http://localhost:5173'], 
+    credentials: true 
+  }));
   app.use(express.json());
 
   // Rutas de autenticación
