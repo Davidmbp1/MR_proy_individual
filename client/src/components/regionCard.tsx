@@ -1,14 +1,16 @@
 // client/src/components/RegionCard.tsx
 
+import { Link } from 'react-router-dom';
+
 interface RegionCardProps {
-  region: string
-  img: string
+  region: string;
+  img: string;
 }
 
 export const RegionCard = ({ region, img }: RegionCardProps) => {
   return (
-    <a
-      href="/"
+    <Link
+      to={`/restaurants?region=${encodeURIComponent(region)}`}
       className="
         group
         block
@@ -59,6 +61,8 @@ export const RegionCard = ({ region, img }: RegionCardProps) => {
         <h3 className="text-3xl font-bold">{region}</h3>
         <p className="text-lg font-medium">restaurants</p>
       </div>
-    </a>
-  )
-}
+    </Link>
+  );
+};
+
+export default RegionCard;
