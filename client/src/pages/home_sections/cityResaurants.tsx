@@ -1,5 +1,6 @@
 // client/src/pages/sections/CityRestaurants.tsx
-import { RegionCard } from "../../components/regionCard";
+
+import RegionCard from '../../components/regionCard';
 
 const regions = [
   {
@@ -74,3 +75,5 @@ export const CityRestaurants = () => {
     </section>
   );
 };
+
+export default CityRestaurants;

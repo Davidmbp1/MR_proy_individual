@@ -8,28 +8,29 @@ import userRoutes from './routes/user.routes';
 import logger from './config/logger';
 
 dotenv.config();
-
 const PORT = process.env.PORT || 4000;
 
 async function main() {
-  await connectDB(); // Conecta a MongoDB
+  await connectDB();
 
   const app = express();
   app.use(helmet());
-  // Ajusta el "origin" según tu setup en el frontend
-  app.use(cors({ 
-    origin: ['http://localhost:5173'], 
-    credentials: true 
+  app.use(cors({
+    origin: ['http://localhost:5173'],
+    credentials: true
   }));
   app.use(express.json());
 
   // Rutas de autenticación
   app.use('/api/auth', authRoutes);
 
-  // Rutas de usuario (profile)
+  // Rutas de usuario
   app.use('/api/users', userRoutes);
 
-  // Ruta de prueba
+  // Rutas de restaurantes
+  const restaurantRoutes = require('./routes/restaurant.routes').default;
+  app.use('/api/restaurants', restaurantRoutes);
+
   app.get('/', (req, res) => {
     res.send('Bienvenido a la API de Last Minute Foods!');
   });
