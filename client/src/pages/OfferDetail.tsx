@@ -43,12 +43,10 @@ const OfferDetail: React.FC = () => {
   const [offer, setOffer] = useState<IOffer | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Datos del comprador
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [notes, setNotes] = useState('');
 
-  // Si no hay token, redirige a Login
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -57,7 +55,6 @@ const OfferDetail: React.FC = () => {
     }
   }, [navigate, location.pathname]);
 
-  // Obtener datos del usuario desde GET /api/users/me
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -78,7 +75,6 @@ const OfferDetail: React.FC = () => {
     }
   }, []);
 
-  // Cargar datos del restaurante y la oferta
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
@@ -110,7 +106,6 @@ const OfferDetail: React.FC = () => {
     );
   }
 
-  // Cálculo de descuento
   const discountPercent = offer.originalPrice
     ? 100 - Math.round((offer.price / offer.originalPrice) * 100)
     : null;
@@ -118,7 +113,6 @@ const OfferDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-white py-8 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-10 relative">
-        {/* Icono decorativo */}
         <div className="absolute top-4 right-4 text-blue-200 hover:text-blue-400 transition duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +130,6 @@ const OfferDetail: React.FC = () => {
           </svg>
         </div>
 
-        {/* Título y subtítulo */}
         <div className="text-center mb-6">
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
             {offer.title}
@@ -152,7 +145,6 @@ const OfferDetail: React.FC = () => {
           </p>
         </div>
 
-        {/* Sección principal: Imagen + Descripción */}
         <div className="flex flex-col md:flex-row gap-6 items-start">
           <div className="w-full md:w-1/2">
             <img
@@ -184,14 +176,12 @@ const OfferDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Datos del comprador */}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <h2 className="text-xl md:text-2xl font-bold mb-4 text-gray-900">
             Datos del comprador
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Nombre */}
             <div>
               <label className="block text-sm font-semibold text-gray-900">
                 Nombre completo
@@ -205,7 +195,6 @@ const OfferDetail: React.FC = () => {
               />
             </div>
 
-            {/* Correo */}
             <div>
               <label className="block text-sm font-semibold text-gray-900">
                 Correo electrónico
@@ -220,7 +209,6 @@ const OfferDetail: React.FC = () => {
             </div>
           </div>
 
-          {/* Comentarios */}
           <div className="mt-6">
             <label className="block text-sm font-semibold text-gray-900">
               Comentarios o instrucciones
@@ -234,8 +222,6 @@ const OfferDetail: React.FC = () => {
             />
           </div>
         </div>
-
-        {/* Botón de Confirmar Compra */}
         <div className="mt-8 text-center">
           <ConfirmPurchaseButton
             offerId={offer._id}

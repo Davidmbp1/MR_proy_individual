@@ -1,0 +1,5 @@
+/* client/src/styles/leafletZIndex.css */
+.leaflet-container {
+    z-index: 0 !important;
+  }
+  

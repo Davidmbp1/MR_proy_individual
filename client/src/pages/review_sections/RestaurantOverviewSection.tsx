@@ -12,7 +12,7 @@ interface IRestaurant {
   address?: string;
   mainImage?: string;
   overview?: string;
-  // ...otros campos
+
 }
 
 interface RestaurantOverviewSectionProps {
@@ -21,7 +21,6 @@ interface RestaurantOverviewSectionProps {
 
 const RestaurantOverviewSection: React.FC<RestaurantOverviewSectionProps> = ({ restaurant }) => {
   const fallbackImage = 'https://www.abasturhub.com/img/blog/mejores-restaurantes---diseno-sin-titulo.jpg';
-  // Estado para controlar la fuente de la imagen y reestablecer a fallback en caso de error
   const [imgSrc, setImgSrc] = useState(restaurant.mainImage || fallbackImage);
 
   return (

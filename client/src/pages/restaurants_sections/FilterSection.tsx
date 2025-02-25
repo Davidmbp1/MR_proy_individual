@@ -21,8 +21,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({
 }) => {
   const [regionsList, setRegionsList] = useState<string[]>([]);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
   useEffect(() => {
-    fetch('http://localhost:4000/api/restaurants/regions')
+    fetch(`${backendUrl}/api/restaurants/regions`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`);
@@ -37,7 +39,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       .catch((err) => {
         console.error('Error fetching regions:', err);
       });
-  }, []);
+  }, [backendUrl]);
 
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRegion(e.target.value);
@@ -48,7 +50,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Filter Results</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Region */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
             <FaMapMarkerAlt className="text-blue-500" />
@@ -68,7 +69,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           </select>
         </div>
 
-        {/* Cuisine */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
             <FaUtensils className="text-green-500" />
@@ -88,7 +88,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           </select>
         </div>
 
-        {/* Price Range */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
             <FaDollarSign className="text-yellow-500" />

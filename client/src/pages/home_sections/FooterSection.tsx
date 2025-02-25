@@ -3,9 +3,7 @@ import React from 'react';
 function FooterSection() {
   return (
     <footer className="bg-blue-900 text-white mt-8">
-      {/* Contenedor principal */}
       <div className="max-w-7xl mx-auto py-10 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-        {/* Columna 1: Marca / Sobre nosotros */}
         <div className="space-y-2">
           <h1 className="text-2xl font-extrabold">LastMinuteFoods</h1>
           <p className="text-sm text-gray-200">
@@ -13,7 +11,6 @@ function FooterSection() {
           </p>
         </div>
 
-        {/* Columna 2: Diners */}
         <div>
           <h4 className="text-lg font-bold mb-2">Diners</h4>
           <p className="text-sm text-gray-200 mb-4">
@@ -24,7 +21,6 @@ function FooterSection() {
           </button>
         </div>
 
-        {/* Columna 3: Restaurateurs */}
         <div>
           <h4 className="text-lg font-bold mb-2">Restaurateurs</h4>
           <p className="text-sm text-gray-200 mb-4">
@@ -35,14 +31,12 @@ function FooterSection() {
           </button>
         </div>
 
-        {/* Columna 4: Redes sociales */}
         <div>
           <h4 className="text-lg font-bold mb-2">Follow us</h4>
           <p className="text-sm text-gray-200 mb-4">
             Stay updated on deals and tips to reduce food waste.
           </p>
           <div className="flex items-center space-x-3">
-            {/* Facebook */}
             <a
               href="#"
               className="bg-white text-blue-900 w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
@@ -53,7 +47,6 @@ function FooterSection() {
               </svg>
             </a>
 
-            {/* Instagram */}
             <a
               href="#"
               className="bg-white text-blue-900 w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
@@ -66,7 +59,6 @@ function FooterSection() {
           </div>
         </div>
 
-        {/* Sección adicional: Newsletter */}
         <div className="max-w-7xl mx-auto py-6 px-4 mt-8 border-t border-gray-300">
           <h4 className="text-lg font-bold mb-3 text-white">Subscribe to our Newsletter</h4>
           <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -82,7 +74,6 @@ function FooterSection() {
         </div>
       </div>
 
-      {/* Línea y texto final */}
       <div className="border-t border-blue-800 text-center py-4 text-sm text-gray-200">
         © LastMinuteFoods 2025 &nbsp;|&nbsp;
         <a href="#" className="underline hover:text-white transition-colors">

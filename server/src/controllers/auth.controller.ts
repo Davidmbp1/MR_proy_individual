@@ -14,17 +14,14 @@ export const register: RequestHandler = async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
-    // Verificar si ya existe usuario
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: 'El email ya está en uso' });
       return;
     }
 
-    // Hashear password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario; se asume que agreeTerms se guarda como false por defecto
     const newUser = await User.create({
       email,
       password: hashedPassword,
@@ -32,7 +29,6 @@ export const register: RequestHandler = async (req, res) => {
       agreeTerms: false
     });
 
-    // Generar token
     const token = jwt.sign(
       { userId: newUser._id, role: newUser.role },
       JWT_SECRET,
@@ -60,14 +56,12 @@ export const login: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Buscar usuario
     const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({ message: 'Credenciales inválidas (usuario no encontrado)' });
       return;
     }
 
-    // Si el usuario se registró con Google (sin password)
     if (!user.password) {
       res.status(401).json({ message: 'Usuario registrado con Google, use Google Login' });
       return;
@@ -79,7 +73,6 @@ export const login: RequestHandler = async (req, res) => {
       return;
     }
 
-    // Generar JWT
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       JWT_SECRET,
@@ -106,7 +99,6 @@ export const googleLogin: RequestHandler = async (req, res) => {
   try {
     const { token } = req.body;
 
-    // Verificar token con Google
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID
@@ -124,14 +116,13 @@ export const googleLogin: RequestHandler = async (req, res) => {
       return;
     }
 
-    // Buscar o crear usuario
     let user = await User.findOne({ email });
     if (!user) {
       user = await User.create({
         email,
         googleId: sub,
         name,
-        agreeTerms: false // Por defecto, perfil incompleto
+        agreeTerms: false
       });
     } else if (!user.googleId) {
       user.googleId = sub || '';
@@ -141,7 +132,6 @@ export const googleLogin: RequestHandler = async (req, res) => {
       await user.save();
     }
 
-    // Generar JWT interno
     const internalToken = jwt.sign(
       { userId: user._id, role: user.role },
       JWT_SECRET,

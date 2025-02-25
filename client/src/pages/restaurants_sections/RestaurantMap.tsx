@@ -1,11 +1,14 @@
 // client/src/pages/restaurants_sections/RestaurantMap.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { motion, AnimatePresence } from 'framer-motion';
 import L from 'leaflet';
 import AutoFitBounds from './AutoFitBounds';
-import RestaurantDetailCard from './RestaurantDetailCard';
+import RestaurantCard from '../../components/RestaurantCard';
 
-// Asegúrate de tener la imagen en public/icons/restaurant.png
+// 1) Import the CSS override to force the map behind other elements
+import '../../styles/leafletZIndex.css';
+
 const bigRestaurantIcon = L.icon({
   iconUrl: '/icons/restaurant.png',
   iconSize: [50, 50],
@@ -14,6 +17,7 @@ const bigRestaurantIcon = L.icon({
 });
 
 interface IOffer {
+  _id: string;
   title: string;
   description?: string;
   price: number;
@@ -21,6 +25,7 @@ interface IOffer {
   expiryDate: Date;
   quantity?: number;
   status?: string;
+  stripePriceId?: string;
 }
 
 export interface ILocation {
@@ -39,7 +44,7 @@ export interface IRestaurant {
   priceRange?: string;
   cuisine?: string[];
   offers?: IOffer[];
-  // ...otros campos que necesites
+  venueType?: string;
 }
 
 interface RestaurantMapProps {
@@ -47,11 +52,9 @@ interface RestaurantMapProps {
 }
 
 const RestaurantMap: React.FC<RestaurantMapProps> = ({ restaurants }) => {
-  // Siempre usamos restaurants (inicializado en el padre como array)
   const [selectedRestaurant, setSelectedRestaurant] = useState<IRestaurant | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
 
-  // Calcula posiciones [lat, lng] para AutoFitBounds
   const positions: [number, number][] = restaurants
     .filter((r) => r.location)
     .map((r) => {
@@ -59,12 +62,10 @@ const RestaurantMap: React.FC<RestaurantMapProps> = ({ restaurants }) => {
       return [lat, lng];
     });
 
-  // Cuando se hace clic en un marcador
   const handleMarkerClick = (restaurant: IRestaurant) => {
     setSelectedRestaurant(restaurant);
   };
 
-  // Efecto para hacer scroll hacia la tarjeta cuando se seleccione un restaurante
   useEffect(() => {
     if (selectedRestaurant && detailRef.current) {
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -73,21 +74,17 @@ const RestaurantMap: React.FC<RestaurantMapProps> = ({ restaurants }) => {
 
   return (
     <>
-      <div className="relative w-full h-[70vh] border rounded shadow">
+      <div className="relative w-full h-[70vh] border rounded shadow-lg overflow-hidden">
         <MapContainer
           center={[-12.046374, -77.042793]}
           zoom={8}
-          style={{ width: '100%', height: '100%' }}
+          className="w-full h-full"
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
           />
-
-          {/* Auto-ajusta el mapa a los marcadores */}
           <AutoFitBounds positions={positions} />
-
-          {/* Renderiza los marcadores */}
           {restaurants.map((restaurant) => {
             if (!restaurant.location) return null;
             const [lng, lat] = restaurant.location.coordinates;
@@ -105,15 +102,38 @@ const RestaurantMap: React.FC<RestaurantMapProps> = ({ restaurants }) => {
         </MapContainer>
       </div>
 
-      {/* Tarjeta de detalle debajo del mapa */}
-      {selectedRestaurant && (
-        <div ref={detailRef} className="mt-4 max-w-7xl mx-auto px-4">
-          <RestaurantDetailCard
-            restaurant={selectedRestaurant}
-            onClose={() => setSelectedRestaurant(null)}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {selectedRestaurant && (
+          <motion.div
+            ref={detailRef}
+            className="mt-4 max-w-7xl mx-auto px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex justify-end">
+              <button
+                onClick={() => setSelectedRestaurant(null)}
+                className="text-gray-500 hover:text-gray-700 px-2 py-1"
+              >
+                ✕
+              </button>
+            </div>
+            <RestaurantCard
+              _id={selectedRestaurant._id}
+              name={selectedRestaurant.name}
+              region={selectedRestaurant.region}
+              address={selectedRestaurant.address}
+              cuisine={selectedRestaurant.cuisine}
+              rating={selectedRestaurant.rating}
+              priceRange={selectedRestaurant.priceRange}
+              offers={selectedRestaurant.offers}
+              venueType={selectedRestaurant.venueType}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

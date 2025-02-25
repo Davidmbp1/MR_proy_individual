@@ -117,7 +117,6 @@ const Review: React.FC = () => {
         <AddReviewForm
           restaurantId={restaurantId || ''}
           onReviewCreated={() => {
-            // No insertamos localmente para evitar duplicados; el socket se encargará de actualizar.
           }}
         />
       </div>

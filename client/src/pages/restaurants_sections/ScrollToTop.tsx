@@ -6,7 +6,6 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Solo se ejecuta cuando cambia el pathname, no cuando solo cambia la query
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [pathname]);
 

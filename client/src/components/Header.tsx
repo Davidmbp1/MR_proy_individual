@@ -1,3 +1,4 @@
+// client/src/components/Header.tsx
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaSearch, FaUserCircle } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
@@ -9,7 +10,7 @@ function Header() {
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>('');
 
-  // Al iniciar sesión se deben guardar 'userAvatar' y 'userName' en localStorage
+  // Lee avatar y nombre del localStorage si el usuario está autenticado
   useEffect(() => {
     if (token) {
       const avatar = localStorage.getItem('userAvatar');
@@ -24,6 +25,18 @@ function Header() {
     localStorage.removeItem('userAvatar');
     localStorage.removeItem('userName');
     navigate('/');
+  };
+
+  // Obtén la URL del backend (usada solo para rutas relativas antiguas)
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+
+  // Función helper: si la URL ya es completa (empieza con http), la usa tal cual;
+  // de lo contrario, le antepone el backendUrl.
+  const getAvatarUrl = (url: string) => {
+    if (url.startsWith('http')) {
+      return url;
+    }
+    return `${backendUrl}${url}`;
   };
 
   return (
@@ -89,7 +102,7 @@ function Header() {
                   >
                     {userAvatar ? (
                       <img
-                        src={userAvatar.startsWith('/') ? `http://localhost:4000${userAvatar}` : userAvatar}
+                        src={getAvatarUrl(userAvatar)}
                         alt="Avatar"
                         className="w-8 h-8 rounded-full inline-block mr-2"
                       />

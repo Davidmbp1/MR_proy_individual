@@ -8,7 +8,6 @@ interface FaqItem {
   answer: string;
 }
 
-// FAQ_DATA actualizado para abarcar más tipos de locales y expansión futura
 const FAQ_DATA: FaqItem[] = [
   {
     question: 'What is LastMinuteFoods?',

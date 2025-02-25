@@ -16,7 +16,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
   const [images, setImages] = useState<FileList | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  // Referencia para el input de archivos
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,10 +53,8 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
         }
       );
 
-      // El socket 'reviewCreated' se encargará de insertar la reseña en tiempo real
       onReviewCreated(res.data.review);
 
-      // Reseteamos los campos del formulario
       setComment('');
       setImages(null);
       setRating(5);
@@ -85,7 +82,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
       <h3 className="text-2xl font-bold text-gray-800 mb-6">Add a Review</h3>
       {error && <p className="text-red-600 mb-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Rating */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Rating
@@ -109,7 +105,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
           </div>
         </div>
 
-        {/* Comment */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Comment
@@ -124,12 +119,10 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
           />
         </div>
 
-        {/* Custom File Upload */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Images (optional)
           </label>
-          {/* Ocultamos el input real */}
           <input
             ref={fileInputRef}
             type="file"
@@ -138,7 +131,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
             onChange={(e) => setImages(e.target.files)}
             className="hidden"
           />
-          {/* Área / botón personalizado */}
           <div
             onClick={handleFileInputClick}
             className="w-full border-2 border-dashed border-gray-300 rounded-md p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition"
@@ -153,7 +145,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
               You can upload up to 5 images
             </p>
           </div>
-          {/* Texto que muestra cuántos archivos se han seleccionado */}
           {images && images.length > 0 && (
             <p className="text-sm text-gray-600 mt-2">
               {images.length} file{images.length > 1 ? 's' : ''} selected
@@ -161,7 +152,6 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ restaurantId, onReviewCre
           )}
         </div>
 
-        {/* Submit Button */}
         <motion.button
           type="submit"
           disabled={loading}

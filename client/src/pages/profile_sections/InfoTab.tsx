@@ -15,18 +15,15 @@ interface IUser {
 interface InfoTabProps {
   user: IUser;
   onUserUpdate: (updatedUser: IUser) => void; 
-  // ↑ Callback para notificar al componente padre que se actualizó el usuario
 }
 
 const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
   const [editing, setEditing] = useState(false);
 
-  // Campos locales para editar
   const [localName, setLocalName] = useState(user.name);
   const [localEmail, setLocalEmail] = useState(user.email);
 
   useEffect(() => {
-    // Cada vez que cambie "user", actualizamos los campos locales
     setLocalName(user.name);
     setLocalEmail(user.email);
   }, [user]);
@@ -36,7 +33,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
   };
 
   const handleCancel = () => {
-    // Revertimos los cambios locales
     setLocalName(user.name);
     setLocalEmail(user.email);
     setEditing(false);
@@ -44,7 +40,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
 
   const handleSave = async () => {
     try {
-      // Llamamos al backend para actualizar
       const token = localStorage.getItem('token');
       if (!token) {
         alert('No token found. Please log in again.');
@@ -64,7 +59,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
       );
 
       if (res.data?.user) {
-        // Notificamos al padre con la nueva data
         onUserUpdate({
           ...user,
           name: res.data.user.name,
@@ -92,7 +86,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
         <h2 className="text-xl font-bold text-gray-800">
           Account Details
         </h2>
-        {/* Botón Edit / Save según el estado */}
         {!editing ? (
           <button
             className="flex items-center gap-1 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm font-medium"
@@ -126,7 +119,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
 
       <AnimatePresence mode="wait">
         {!editing ? (
-          // Vista de solo lectura
           <motion.div
             key="view-mode"
             initial={{ opacity: 0, x: 20 }}
@@ -135,7 +127,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
             transition={{ duration: 0.3 }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-              {/* Campo: Name */}
               <div className="flex items-start gap-2">
                 <FaRegUser className="text-blue-600 mt-1" size={18} />
                 <div>
@@ -145,7 +136,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
                   </p>
                 </div>
               </div>
-              {/* Campo: Email */}
               <div className="flex items-start gap-2">
                 <FaEnvelope className="text-blue-600 mt-1" size={18} />
                 <div>
@@ -158,7 +148,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
             </div>
           </motion.div>
         ) : (
-          // Modo edición
           <motion.div
             key="edit-mode"
             initial={{ opacity: 0, x: 20 }}
@@ -167,7 +156,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
             transition={{ duration: 0.3 }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-              {/* Input: Name */}
               <div className="flex flex-col">
                 <label className="text-xs text-gray-500 mb-1" htmlFor="name">
                   Name
@@ -180,7 +168,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ user, onUserUpdate }) => {
                   onChange={(e) => setLocalName(e.target.value)}
                 />
               </div>
-              {/* Input: Email */}
               <div className="flex flex-col">
                 <label className="text-xs text-gray-500 mb-1" htmlFor="email">
                   Email

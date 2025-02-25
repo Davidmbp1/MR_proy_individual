@@ -1,8 +1,7 @@
 // client/src/pages/Home.tsx
 
-// Import de tus secciones
 import HeroMain from './home_sections/HeroMain'
-import { StepGuide } from '../components/ui/stepGuide' // Import nombrado
+import { StepGuide } from '../components/ui/stepGuide'
 import CityRestaurants from './home_sections/cityResaurants';
 import CommunityCTA from './home_sections/CommunityCTA'
 import StorySection from './home_sections/StorySection'

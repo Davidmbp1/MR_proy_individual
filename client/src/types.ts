@@ -2,7 +2,7 @@
 
 export interface IUser {
     _id: string;
-    name: string; // Hacemos obligatorio el nombre para evitar conflictos
+    name: string;
     avatarUrl?: string;
   }
   

@@ -43,6 +43,8 @@ const SideFilterSection: React.FC<SideFilterProps> = ({
     dietary: [],
   });
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
   useEffect(() => {
     const params: string[] = [];
     if (region && region.trim() !== '') {
@@ -56,14 +58,14 @@ const SideFilterSection: React.FC<SideFilterProps> = ({
     }
     const query = params.length ? `?${params.join('&')}` : '';
 
-    axios.get(`http://localhost:4000/api/restaurants/filters${query}`)
+    axios.get(`${backendUrl}/api/restaurants/filters${query}`)
       .then((res) => {
         setFiltersData(res.data);
       })
       .catch((err) => {
         console.error('Error fetching filters:', err);
       });
-  }, [region, cuisine, priceRange]);
+  }, [backendUrl, region, cuisine, priceRange]);
 
   const handleFeatureChange = (featureName: string) => {
     if (selectedFeatures.includes(featureName)) {

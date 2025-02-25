@@ -5,12 +5,10 @@ function HeroMain() {
   const navigate = useNavigate();
   const [selectedRegion, setSelectedRegion] = useState('');
 
-  // Maneja el cambio en el <select>
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
   };
 
-  // Navega a la ruta correspondiente cuando se hace clic en el botón
   const handleFindDeals = () => {
     if (selectedRegion) {
       navigate(`/restaurants?region=${selectedRegion}`);
@@ -21,7 +19,6 @@ function HeroMain() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center">
-      {/* Imagen de fondo */}
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop"
@@ -31,10 +28,8 @@ function HeroMain() {
         />
       </div>
 
-      {/* Gradiente para oscurecer la imagen y resaltar el texto */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40 z-10" />
 
-      {/* Ola inferior (color gris medio) */}
       <div className="absolute bottom-0 w-full z-20 pointer-events-none">
         <svg
           width="100%"
@@ -52,7 +47,6 @@ function HeroMain() {
         </svg>
       </div>
 
-      {/* Contenido central */}
       <div className="relative z-30 max-w-4xl mx-auto px-4 text-center">
         <h1
           className="
@@ -63,8 +57,8 @@ function HeroMain() {
             hover:scale-105
           "
           style={{
-            WebkitTextStroke: '1px black', // Delineado negro
-            WebkitTextFillColor: 'white',  // Relleno blanco
+            WebkitTextStroke: '1px black', 
+            WebkitTextFillColor: 'white',  
           }}
         >
           Don't let great food go to waste! <br />
@@ -85,9 +79,7 @@ function HeroMain() {
           Enjoy delicious meals at unbeatable prices and help reduce food waste!
         </p>
 
-        {/* Selector y Botón con DaisyUI, ajustados para mayor tamaño y peso */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-          {/* Etiqueta oculta para accesibilidad */}
           <label htmlFor="region-select" className="sr-only">
             Select a Region
           </label>

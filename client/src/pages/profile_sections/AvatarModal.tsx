@@ -19,21 +19,18 @@ const AvatarModal: React.FC<AvatarModalProps> = ({
   handleUploadPhoto,
   fileInputRef,
 }) => {
-  // Manejo del input file
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     handleSelectPhoto(file);
   };
 
   return (
-    // Overlay con backdrop-blur
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Contenedor del modal con animación suave en Y */}
       <motion.div
         className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6"
         initial={{ y: 50, opacity: 0 }}
@@ -41,7 +38,6 @@ const AvatarModal: React.FC<AvatarModalProps> = ({
         exit={{ y: 50, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Botón de cerrar (X) en la esquina sup. derecha */}
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
           onClick={closeModal}
@@ -50,12 +46,10 @@ const AvatarModal: React.FC<AvatarModalProps> = ({
           <FaTimes size={18} />
         </button>
 
-        {/* Título */}
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
           Change Profile Photo
         </h2>
 
-        {/* Vista previa animada de la foto */}
         <motion.div
           className="flex justify-center mb-4"
           initial={{ scale: 0.9, opacity: 0 }}
@@ -75,7 +69,6 @@ const AvatarModal: React.FC<AvatarModalProps> = ({
           )}
         </motion.div>
 
-        {/* Botón personalizado para elegir archivo */}
         <div className="flex justify-center mb-6">
           <label className="inline-flex items-center gap-2 px-5 py-2 bg-gray-100 text-gray-700 rounded-md cursor-pointer hover:bg-gray-200 transition relative">
             <FaUpload />
@@ -90,7 +83,6 @@ const AvatarModal: React.FC<AvatarModalProps> = ({
           </label>
         </div>
 
-        {/* Botones de acción */}
         <div className="flex justify-end gap-3">
           <button
             onClick={closeModal}

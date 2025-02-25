@@ -33,15 +33,12 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Control de tabs
   const [activeTab, setActiveTab] = useState<'info' | 'purchases'>('info');
 
-  // Control del modal de avatar
   const [showModal, setShowModal] = useState(false);
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Ref para el input file
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -54,7 +51,6 @@ const Profile: React.FC = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // 1) Obtener datos del usuario
         const userRes = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/users/me`,
           {
@@ -63,7 +59,6 @@ const Profile: React.FC = () => {
         );
         setUser(userRes.data.user);
 
-        // 2) Obtener compras
         const purchaseRes = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/purchases/my`,
           {
@@ -82,7 +77,6 @@ const Profile: React.FC = () => {
     fetchData();
   }, [navigate]);
 
-  // Funciones para el modal de avatar
   const openModal = () => {
     setShowModal(true);
     setNewPhoto(null);
@@ -130,7 +124,6 @@ const Profile: React.FC = () => {
           },
         }
       );
-      // Actualizamos el usuario con la nueva URL
       setUser({ ...user, avatarUrl: res.data.avatarUrl });
       alert('Profile photo updated successfully!');
       closeModal();
@@ -174,7 +167,6 @@ const Profile: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-white flex flex-col">
       <ProfileHeader user={user} onOpenModal={openModal} />
 
-      {/* Tabs */}
       <div className="max-w-4xl mx-auto w-full px-4 py-6 flex gap-6 border-b border-gray-200">
         <button
           onClick={() => setActiveTab('info')}
@@ -198,7 +190,6 @@ const Profile: React.FC = () => {
         </button>
       </div>
 
-      {/* Contenido según tab */}
       <div className="max-w-4xl mx-auto w-full px-4 pb-10 flex-1">
         {activeTab === 'info' && (
           <InfoTab user={user} onUserUpdate={(updatedUser) => setUser(updatedUser)} />
@@ -206,7 +197,6 @@ const Profile: React.FC = () => {
         {activeTab === 'purchases' && <PurchasesTab purchases={purchases} />}
       </div>
 
-      {/* Modal de Avatar */}
       <AnimatePresence>
         {showModal && (
           <AvatarModal

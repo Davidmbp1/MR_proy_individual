@@ -25,7 +25,6 @@ const cardVariants = {
 };
 
 const PurchasesTab: React.FC<PurchasesTabProps> = ({ purchases }) => {
-  // State to control the voucher modal
   const [selectedVoucher, setSelectedVoucher] = useState<string | null>(null);
   const qrRef = useRef<HTMLCanvasElement>(null);
 
@@ -71,7 +70,6 @@ const PurchasesTab: React.FC<PurchasesTabProps> = ({ purchases }) => {
             animate="visible"
             variants={cardVariants}
           >
-            {/* Purchase Info */}
             <div>
               <div className="flex justify-between items-center mb-3">
                 <div>
@@ -101,7 +99,6 @@ const PurchasesTab: React.FC<PurchasesTabProps> = ({ purchases }) => {
               </div>
             </div>
 
-            {/* Button to open voucher modal */}
             {purchase.voucherCode && purchase.status === 'paid' && (
               <button
                 onClick={() => openVoucherModal(purchase.voucherCode!)}
@@ -114,7 +111,6 @@ const PurchasesTab: React.FC<PurchasesTabProps> = ({ purchases }) => {
         ))}
       </div>
 
-      {/* Modal for QR Voucher */}
       <AnimatePresence>
         {selectedVoucher && (
           <motion.div

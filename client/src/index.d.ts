@@ -26,8 +26,6 @@ declare namespace nProgress {
         inc(amount?: number): NProgress;
         trickle(): NProgress;
 
-        /* Internal */
-
         render(fromStart?: boolean): HTMLDivElement;
         remove(): void;
         isRendered(): boolean;

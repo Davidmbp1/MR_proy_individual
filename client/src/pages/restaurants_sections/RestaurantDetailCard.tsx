@@ -10,7 +10,7 @@ interface IOffer {
   originalPrice?: number;
   expiryDate: Date;
   quantity?: number;
-  status?: string;  // "active", "expired", etc.
+  status?: string;
 }
 
 export interface IRestaurant {
@@ -47,7 +47,6 @@ const RestaurantDetailCard: React.FC<RestaurantDetailCardProps> = ({ restaurant,
 
   return (
     <div className="p-4 border rounded shadow bg-white">
-      {/* Botón de cierre */}
       <div className="flex justify-end">
         <button
           onClick={onClose}
@@ -57,7 +56,6 @@ const RestaurantDetailCard: React.FC<RestaurantDetailCardProps> = ({ restaurant,
         </button>
       </div>
 
-      {/* Contenido principal */}
       <div className="flex flex-col md:flex-row gap-4">
         <img
           src={restaurant.mainImage || 'https://via.placeholder.com/300'}
@@ -80,13 +78,11 @@ const RestaurantDetailCard: React.FC<RestaurantDetailCardProps> = ({ restaurant,
         </div>
       </div>
 
-      {/* Sección de ofertas */}
       {restaurant.offers && restaurant.offers.length > 0 && (
         <div className="mt-4">
           <h3 className="text-lg font-bold mb-2">Offers</h3>
           <div className="flex flex-wrap gap-2">
             {restaurant.offers.map((offer) => {
-              // Verifica que la oferta tenga un _id
               if (!offer._id) return null;
 
               return (
@@ -101,7 +97,6 @@ const RestaurantDetailCard: React.FC<RestaurantDetailCardProps> = ({ restaurant,
                       : 'No discount'}
                   </p>
 
-                  {/* Enlace a la página de detalle de la oferta */}
                   <Link
                     to={`/restaurants/${restaurant._id}/offer/${offer._id}`}
                     className="mt-2 text-blue-500 underline text-sm hover:text-blue-700"

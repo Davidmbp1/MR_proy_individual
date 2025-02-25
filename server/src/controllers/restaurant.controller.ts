@@ -49,7 +49,6 @@ export const getFilters: RequestHandler = async (req, res) => {
     const { region, cuisine, priceRange, features, dietary } = req.query;
     const match: any = {};
 
-    // Solo se filtra si el valor está definido y no es cadena vacía.
     if (region && typeof region === 'string' && region.trim() !== '') {
       match.region = region.trim();
     }
@@ -66,7 +65,6 @@ export const getFilters: RequestHandler = async (req, res) => {
       match.dietary = { $all: dietary.split(',').map(d => d.trim()) };
     }
 
-    // Realiza la agregación basada en el match (si no hay region, no se aplica ningún filtro)
     const regionAgg = await Restaurant.aggregate([
       { $match: match },
       { $group: { _id: '$region', count: { $sum: 1 } } },

@@ -12,7 +12,7 @@ export const sendTestEmail: RequestHandler = async (req: Request, res: Response)
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM, // usa la variable configurada
+      from: process.env.EMAIL_FROM,
       to,
       subject,
       text,

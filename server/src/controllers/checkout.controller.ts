@@ -5,8 +5,8 @@ import { AuthRequest } from '../middlewares/authMiddleware';
 import Stripe from 'stripe';
 import Restaurant from '../models/Restaurant';
 import Purchase from '../models/Purchase';
-import crypto from 'crypto'; // Usamos crypto para generar un voucherCode
-import { Types } from 'mongoose'; // Por si necesitamos manipular ObjectId
+import crypto from 'crypto';
+import { Types } from 'mongoose';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-01-27.acacia',
@@ -49,7 +49,6 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
       return;
     }
 
-    // Leer FRONTEND_URL desde .env
     const frontendUrl = process.env.FRONTEND_URL;
     if (!frontendUrl) {
       console.error('FRONTEND_URL is not defined in environment');
@@ -65,12 +64,11 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
       return;
     }
 
-    // Calcular comisión como porcentaje (ej. 10% de la cantidad)
-    const totalAmount = offer.price * 100; // Convertir el precio a centavos
-    const feePercentage = 0.10;            // 10% de comisión
+    // Calcular comisión como porcentaje
+    const totalAmount = offer.price * 100; 
+    const feePercentage = 0.10;           
     const applicationFeeAmount = Math.round(totalAmount * feePercentage);
 
-    // Crear la sesión de checkout con transfer_data (para cuentas conectadas)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -92,17 +90,16 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
 
     console.log('Checkout Session creada con ID:', session.id);
 
-    // Generar un código único para el voucher usando crypto (10 caracteres hex)
     const voucherCode = crypto.randomBytes(5).toString('hex');
 
     // Crear registro de Purchase en la BD
     const newPurchase = new Purchase({
-      userId: req.user.userId, // Almacenamos el userId desde el token
+      userId: req.user.userId, 
       restaurantId: restaurant._id instanceof Types.ObjectId
         ? restaurant._id.toString()
         : restaurant._id,
       offerId: offerId,
-      amount: offer.price, // El precio de la oferta (en dólares o soles, según tu lógica)
+      amount: offer.price,
       status: 'pending',
       stripeSessionId: session.id,
       voucherCode: voucherCode,
@@ -110,7 +107,6 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
 
     await newPurchase.save();
 
-    // Devolvemos el sessionId y la URL (opcional)
     res.json({ sessionId: session.id, url: session.url });
   } catch (error: any) {
     console.error('Error creating checkout session:', error);

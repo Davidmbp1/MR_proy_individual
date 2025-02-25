@@ -1,22 +1,33 @@
-// server/src/controllers/review.controller.ts
-
 import { Request, Response, RequestHandler } from 'express';
 import Review, { IReview } from '../models/Review';
 import logger from '../config/logger';
+import { bucket } from '../config/googleCloudStorage';
 
-/**
- * Extensión de Request para que req.files sea un array de Express.Multer.File.
- * Esto es válido cuando se usa upload.array(...) en las rutas.
- */
 type MulterRequest = Request & {
   files?: Express.Multer.File[];
 };
 
-/**
- * Crea una nueva reseña.
- * Se esperan en req.body: restaurant, rating, comment.
- * Se permiten hasta 5 imágenes subidas en el campo 'images'.
- */
+const uploadFileToGCS = (file: Express.Multer.File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const { originalname, buffer, mimetype } = file;
+    const filename = `${Date.now()}_${originalname}`;
+    const fileUpload = bucket.file(filename);
+    const stream = fileUpload.createWriteStream({
+      metadata: { contentType: mimetype },
+    });
+    stream.on('error', (err) => {
+      logger.error('Error al subir archivo a GCS:', err);
+      reject(err);
+    });
+    stream.on('finish', async () => {
+      // No usamos makePublic() debido a uniform bucket-level access.
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`;
+      resolve(publicUrl);
+    });
+    stream.end(buffer);
+  });
+};
+
 export const createReview = (async (req: MulterRequest, res: Response): Promise<void> => {
   try {
     const userId = (req as any).user?.userId;
@@ -32,7 +43,7 @@ export const createReview = (async (req: MulterRequest, res: Response): Promise<
     }
 
     const uploadedFiles = (req.files as Express.Multer.File[] | undefined) || [];
-    const images: string[] = uploadedFiles.map(file => `/uploads/${file.filename}`);
+    const images: string[] = await Promise.all(uploadedFiles.map(file => uploadFileToGCS(file)));
 
     const review: IReview = new Review({
       user: userId,
@@ -43,13 +54,9 @@ export const createReview = (async (req: MulterRequest, res: Response): Promise<
     });
 
     await review.save();
-
-    // Populamos el campo 'user' para incluir name, avatarUrl y email
     await review.populate('user', 'name avatarUrl email');
-
     logger.info(`Review created for restaurant ${restaurant} by user ${userId}`);
 
-    // Emitir evento vía Socket.IO con la reseña ya populada
     const io = req.app.get('socketio');
     if (io) {
       io.emit('reviewCreated', review);
@@ -64,9 +71,6 @@ export const createReview = (async (req: MulterRequest, res: Response): Promise<
   }
 }) as RequestHandler;
 
-/**
- * Obtiene las reseñas de un restaurante usando el query parameter "restaurantId".
- */
 export const getReviewsByRestaurant: RequestHandler = async (req, res) => {
   try {
     const { restaurantId } = req.query;
@@ -86,9 +90,6 @@ export const getReviewsByRestaurant: RequestHandler = async (req, res) => {
   }
 };
 
-/**
- * Actualiza una reseña. Solo el usuario creador puede editar.
- */
 export const updateReview: RequestHandler = async (req, res) => {
   try {
     const reviewId = req.params.id;
@@ -113,7 +114,6 @@ export const updateReview: RequestHandler = async (req, res) => {
     await review.save();
     logger.info(`Review ${reviewId} updated by user ${userId}`);
 
-    // Emitir evento de actualización vía Socket.IO
     const io = req.app.get('socketio');
     if (io) {
       io.emit('reviewUpdated', review);
@@ -128,9 +128,6 @@ export const updateReview: RequestHandler = async (req, res) => {
   }
 };
 
-/**
- * Elimina una reseña. Solo el creador puede borrarla.
- */
 export const deleteReview: RequestHandler = async (req, res) => {
   try {
     const reviewId = req.params.id;
@@ -151,7 +148,6 @@ export const deleteReview: RequestHandler = async (req, res) => {
     await Review.findByIdAndDelete(reviewId);
     logger.info(`Review ${reviewId} deleted by user ${userId}`);
 
-    // Emitir evento de borrado vía Socket.IO
     const io = req.app.get('socketio');
     if (io) {
       io.emit('reviewDeleted', reviewId);

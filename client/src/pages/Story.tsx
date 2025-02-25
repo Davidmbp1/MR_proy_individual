@@ -15,18 +15,14 @@ const futureImg =
   'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&w=1600&q=80';
 
 const Story: React.FC = () => {
-  // Hook de navegación de React Router
   const navigate = useNavigate();
 
-  // Función para ir a la pantalla de "all regions"
   const goToRestaurants = () => {
     navigate('/restaurants'); 
-    // Ajusta la ruta o parámetros si necesitas más lógica
   };
 
   return (
     <section className="min-h-screen flex flex-col bg-gray-50">
-      {/* HERO SECTION */}
       <div className="relative h-[500px] w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-blue-900/20">
           <img
@@ -67,13 +63,10 @@ const Story: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Sección circular al fondo del hero */}
         <div className="absolute bottom-0 left-0 w-full h-20 bg-white rounded-tl-[100%] rounded-tr-[100%]" />
       </div>
 
-      {/* MAIN CONTENT */}
       <div className="relative z-30 max-w-5xl mx-auto px-4 py-12 flex-1">
-        {/* SECTION 1: Origins */}
         <motion.div
           className="grid md:grid-cols-2 gap-6 mb-12 items-center"
           initial={{ opacity: 0, x: -40 }}
@@ -106,7 +99,6 @@ const Story: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* SECTION 2: Mission */}
         <motion.div
           className="grid md:grid-cols-2 gap-6 mb-12 items-center"
           initial={{ opacity: 0, x: 40 }}
@@ -138,8 +130,6 @@ const Story: React.FC = () => {
             />
           </div>
         </motion.div>
-
-        {/* SECTION 3: Future Vision */}
         <motion.div
           className="grid md:grid-cols-2 gap-6 mb-12 items-center"
           initial={{ opacity: 0, x: -40 }}
@@ -172,8 +162,6 @@ const Story: React.FC = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* CALL TO ACTION */}
       <div className="relative z-30 bg-white py-10 px-4 border-t border-gray-200 shadow-inner">
         <div className="max-w-2xl mx-auto text-center">
           <h3 className="text-2xl font-semibold text-gray-800">
@@ -185,7 +173,7 @@ const Story: React.FC = () => {
           </p>
           <button
             className="mt-6 inline-block bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition font-medium"
-            onClick={goToRestaurants} // Llamamos a la función
+            onClick={goToRestaurants}
           >
             Explore Last-Minute Deals
           </button>

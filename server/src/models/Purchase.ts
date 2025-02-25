@@ -6,10 +6,10 @@ export interface IPurchase extends Document {
   restaurantId: string;       
   offerId: string;            
   amount: number;             
-  status: string;             // "pending", "paid", "redeemed", etc.
+  status: string;             
   stripeSessionId?: string;   
   stripePaymentIntentId?: string; 
-  voucherCode?: string;       // Código único que mostraremos como QR
+  voucherCode?: string;
   redeemedAt?: Date;          
   createdAt: Date;
   updatedAt: Date;

@@ -8,13 +8,11 @@ interface RestaurantHeroProps {
 const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
   const navigate = useNavigate();
 
-  // Imagen de fondo (cambia si lo deseas)
   const backgroundImg =
     'https://trexperienceperu.com/sites/default/files/2024-06/peruvian%20food.jpg';
 
   return (
     <>
-      {/* Animación fadeInUp */}
       <style>
         {`
           @keyframes fadeInUp {
@@ -45,7 +43,6 @@ const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
       </style>
 
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        {/* Imagen de fondo */}
         <div className="absolute inset-0 z-0">
           <img
             src={backgroundImg}
@@ -54,10 +51,8 @@ const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
           />
         </div>
 
-        {/* Overlay oscuro */}
         <div className="absolute inset-0 bg-black/50 z-10" />
 
-        {/* Contenedor principal */}
         <div
           className="
             relative 
@@ -73,27 +68,22 @@ const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
             animate-fadeInUp
           "
         >
-          {/* Bloque de texto (izquierda) */}
           <div className="text-white mt-10 md:mt-0">
-            {/* Ciudad / Región */}
             {region && (
               <span className="block text-lg uppercase tracking-widest text-white/90 mb-2">
                 {region}
               </span>
             )}
-            {/* Título principal más grande */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold drop-shadow-xl leading-tight">
               {region
                 ? `${region} Deals`
                 : 'Last-Minute Foods'}
             </h1>
-            {/* Subtítulo */}
             <p className="text-2xl sm:text-3xl text-white/90 drop-shadow-md mt-2">
               Don’t let perfectly good meals go to waste
             </p>
           </div>
 
-          {/* Recuadro “Early bird dining” (derecha) */}
           <div
             className="
               relative
@@ -125,7 +115,6 @@ const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
                 spots. Save money and help reduce food waste!
               </p>
 
-              {/* Botón Learn More */}
               <button
                 onClick={() => navigate('/faqs')}
                 className="
@@ -146,7 +135,6 @@ const RestaurantHero: React.FC<RestaurantHeroProps> = ({ region }) => {
                 "
               >
                 Learn More
-                {/* Flecha a la derecha */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5 ml-2"

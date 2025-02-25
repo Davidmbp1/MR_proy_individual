@@ -35,7 +35,7 @@ export const getFilters: RequestHandler = async (req, res) => {
       },
     ];
 
-    // cuisine (es array), necesitamos $unwind
+    // cuisine
     const cuisineAgg: PipelineStage[] = [
       matchStage,
       { $unwind: '$cuisine' },
@@ -111,7 +111,6 @@ export const getFilters: RequestHandler = async (req, res) => {
       },
     ];
 
-    // Ejecutamos en paralelo
     const [priceRanges, cuisines, features, goodFors, dietaries] =
       await Promise.all([
         Restaurant.aggregate(priceRangeAgg),

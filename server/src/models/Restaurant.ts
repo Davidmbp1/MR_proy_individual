@@ -1,15 +1,13 @@
 // server/src/models/Restaurant.ts
 import { Schema, model, Document, Types } from 'mongoose';
 
-/** Interfaz para la ubicación (GeoJSON) */
 export interface ILocation {
   type: 'Point';
-  coordinates: [number, number]; // [lng, lat]
+  coordinates: [number, number];
 }
 
-/** Interfaz para una Oferta */
 export interface IOffer {
-  _id?: Types.ObjectId; // <-- OPCIONAL
+  _id?: Types.ObjectId;
   title: string;
   description?: string;
   price: number;
@@ -20,7 +18,6 @@ export interface IOffer {
   stripePriceId?: string;
 }
 
-/** Interfaz del documento Restaurant */
 export interface IRestaurant extends Document {
   _id: Types.ObjectId;
   name: string;
@@ -40,7 +37,6 @@ export interface IRestaurant extends Document {
   stripeAccountId?: string;
 }
 
-/** Esquema para la ubicación */
 const locationSchema = new Schema<ILocation>(
   {
     type: {
@@ -56,9 +52,6 @@ const locationSchema = new Schema<ILocation>(
   { _id: false }
 );
 
-/** Esquema para las ofertas  
- * (No usamos { _id: false } para que Mongoose genere automáticamente un _id para cada oferta)
- */
 const offerSchema = new Schema<IOffer>({
   title: { type: String, required: true },
   description: { type: String, default: '' },
@@ -70,7 +63,6 @@ const offerSchema = new Schema<IOffer>({
   stripePriceId: { type: String },
 });
 
-/** Esquema principal de Restaurant */
 const restaurantSchema = new Schema<IRestaurant>(
   {
     name: { type: String, required: true },
@@ -94,7 +86,6 @@ const restaurantSchema = new Schema<IRestaurant>(
   }
 );
 
-// Índice geoespacial
 restaurantSchema.index({ location: '2dsphere' });
 
 export default model<IRestaurant>('Restaurant', restaurantSchema);

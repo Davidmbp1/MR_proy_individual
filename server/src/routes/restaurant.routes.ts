@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-// GET /api/restaurants (filtra con ?region=, etc.)
+// GET /api/restaurants
 router.get('/', getAllRestaurants);
 
 // GET /api/restaurants/regions

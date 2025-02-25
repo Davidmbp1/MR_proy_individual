@@ -24,7 +24,6 @@ const floatAnimation = {
 const CityRestaurants: React.FC = () => {
   return (
     <section className="relative bg-orange-50 py-16 overflow-hidden">
-      {/* Bolitas decorativas animadas en tonos naranjas */}
       <motion.div 
         className="absolute -top-10 -left-10 w-40 h-40 bg-orange-100 opacity-70 rounded-full"
         variants={floatAnimation}
@@ -38,7 +37,7 @@ const CityRestaurants: React.FC = () => {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 flex flex-col items-center gap-6">
-        {/* Título principal */}
+        {/* Título */}
         <h2 className="text-center text-3xl sm:text-4xl md:text-5xl text-blue-950 font-bold brightness-125">
           City Restaurants
         </h2>
@@ -48,7 +47,7 @@ const CityRestaurants: React.FC = () => {
           Explore the top districts of Lima – from the trendy streets of Miraflores and Barranco, to the business hubs like San Isidro and more.
         </p>
 
-        {/* Grid de tarjetas con animación */}
+        {/* Grid de tarjetas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
           {regions.map((region, index) => (
             <motion.div

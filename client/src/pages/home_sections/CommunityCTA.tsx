@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 function CommunityCTA() {
-  // Variantes para animar los círculos decorativos
   const floatUpDown = {
     animate: {
       y: [0, -10, 0],
@@ -29,7 +28,6 @@ function CommunityCTA() {
 
   return (
     <section className="relative overflow-hidden bg-gray-100">
-      {/* Elementos decorativos animados en tonos celestes */}
       <motion.div 
         className="absolute -top-10 -left-10 w-40 h-40 bg-blue-100 opacity-70 rounded-full"
         variants={floatUpDown}
@@ -42,7 +40,6 @@ function CommunityCTA() {
       />
 
       <div className="max-w-6xl mx-auto px-4 py-16 relative z-10 flex flex-col md:flex-row items-center gap-8">
-        {/* CONTENIDO IZQUIERDO */}
         <div className="md:w-1/2 text-center md:text-left space-y-6">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900">
             Join our Community of Food Savers!
@@ -68,7 +65,6 @@ function CommunityCTA() {
           </div>
         </div>
         
-        {/* IMAGEN DERECHA */}
         <div className="md:w-1/2 flex justify-center md:justify-end">
           <div className="w-full max-w-md overflow-hidden rounded-lg shadow-md">
             <img

@@ -75,12 +75,10 @@ function StorySection() {
 
   return (
     <section className="relative overflow-hidden bg-orange-50 py-16">
-      {/* Elementos decorativos absolutos en tonos naranjas */}
       <div className="absolute -top-10 -left-10 w-32 h-32 bg-orange-200 opacity-70 rounded-full transform rotate-12" />
       <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-orange-300 opacity-60 rounded-full transform rotate-45" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 flex flex-col items-center text-center space-y-8">
-        {/* ENCABEZADO */}
         <div className="max-w-4xl space-y-4">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-orange-900">
             Our Story
@@ -90,7 +88,6 @@ function StorySection() {
           </p>
         </div>
 
-        {/* CONTENEDOR DEL CARRUSEL */}
         <div className="relative w-full max-w-2xl h-96 overflow-hidden">
           {slidesData.map((slide, index) => (
             <div
@@ -102,7 +99,6 @@ function StorySection() {
               `}
             >
               <div className="flex flex-col items-center space-y-6 px-4">
-                {/* Ícono más grande */}
                 <div className={`
                   ${slide.bgColor} ${slide.textColor} 
                   w-20 h-20 rounded-full flex items-center justify-center shadow
@@ -129,7 +125,6 @@ function StorySection() {
             </div>
           ))}
 
-          {/* Botón PREV */}
           <button
             onClick={handlePrev}
             className="absolute z-30 top-1/2 left-4 -translate-y-1/2 bg-white text-gray-600 rounded-full p-3 shadow hover:bg-gray-100 focus:outline-none"
@@ -139,7 +134,6 @@ function StorySection() {
             </svg>
           </button>
 
-          {/* Botón NEXT */}
           <button
             onClick={handleNext}
             className="absolute z-30 top-1/2 right-4 -translate-y-1/2 bg-white text-gray-600 rounded-full p-3 shadow hover:bg-gray-100 focus:outline-none"
@@ -150,7 +144,6 @@ function StorySection() {
           </button>
         </div>
 
-        {/* INDICADORES (DOTS) */}
         <div className="flex space-x-3">
           {slidesData.map((_, i) => (
             <button
@@ -164,7 +157,6 @@ function StorySection() {
           ))}
         </div>
 
-        {/* CTA FINAL */}
         <Link
           to="/story"
           className="px-8 sm:px-12 py-3 text-white bg-orange-800 font-bold rounded hover:bg-orange-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 mt-4 text-lg"

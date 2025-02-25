@@ -34,7 +34,7 @@ export const getPurchaseBySession = async (
   try {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
-      return; // <--- Simplemente un return normal
+      return;
     }
 
     const { sessionId } = req.params;
@@ -48,17 +48,13 @@ export const getPurchaseBySession = async (
       return;
     }
 
-    // Envías la respuesta, pero sin "return"
     res.json({ purchase });
   } catch (error: any) {
     console.error('Error getting purchase by session:', error);
     res.status(500).json({ error: error.message });
   }
 };
-/**
- * Obtiene un resumen agrupado de compras por usuario.
- * Esto puede ser útil para fines de administración o análisis.
- */
+
 export const getPurchasesGroupedByUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const groupedPurchases = await Purchase.aggregate([

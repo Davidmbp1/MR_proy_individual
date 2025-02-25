@@ -9,14 +9,28 @@ interface ReviewListSectionProps {
   reviews: IReview[];
 }
 
+function isFullUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
+
+function getFullUrl(path: string, backendUrl: string): string {
+  if (!path) return '';
+  if (isFullUrl(path)) {
+    return path;
+  }
+  return `${backendUrl}${path}`;
+}
+
 const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalImage, setModalImage] = useState<string | null>(null);
+
   const reviewsPerPage = 5;
   const startIndex = (currentPage - 1) * reviewsPerPage;
   const endIndex = startIndex + reviewsPerPage;
   const currentReviews = reviews.slice(startIndex, endIndex);
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
   const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
 
   const handlePageChange = (page: number) => {
@@ -24,7 +38,7 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
   };
 
   const openModal = (imgUrl: string) => {
-    const fullImgUrl = imgUrl.startsWith('/') ? `${backendUrl}${imgUrl}` : imgUrl;
+    const fullImgUrl = getFullUrl(imgUrl, backendUrl);
     setModalImage(fullImgUrl);
   };
 
@@ -33,10 +47,12 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
   return (
     <div className="max-w-5xl mx-auto mb-8 px-4">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">What People Say</h2>
+
       <div className="space-y-6">
         {currentReviews.map((review) => {
+
           const avatarUrl = review.user.avatarUrl
-            ? `${backendUrl}${review.user.avatarUrl.startsWith('/') ? '' : '/'}${review.user.avatarUrl}`
+            ? getFullUrl(review.user.avatarUrl, backendUrl)
             : 'https://via.placeholder.com/50';
 
           return (
@@ -62,6 +78,7 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
                   </p>
                 </div>
               </div>
+
               {/* Calificación */}
               <div className="flex items-center mb-3">
                 {Array(Math.round(review.rating))
@@ -71,13 +88,13 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
                   ))}
                 <span className="text-gray-600 text-base">{review.rating.toFixed(1)}</span>
               </div>
-              {/* Comentario */}
+
               <p className="text-gray-700 mb-4 leading-relaxed">{review.comment}</p>
-              {/* Imágenes adjuntas */}
+
               {review.images && review.images.length > 0 && (
                 <div className="flex flex-wrap gap-3">
                   {review.images.map((imgUrl) => {
-                    const fullImgUrl = imgUrl.startsWith('/') ? `${backendUrl}${imgUrl}` : imgUrl;
+                    const fullImgUrl = getFullUrl(imgUrl, backendUrl);
                     return (
                       <motion.img
                         key={imgUrl}
@@ -96,7 +113,7 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
           );
         })}
       </div>
-      {/* Paginación */}
+
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-3 mt-8">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -116,6 +133,7 @@ const ReviewListSection: React.FC<ReviewListSectionProps> = ({ reviews }) => {
           ))}
         </div>
       )}
+
       <AnimatePresence>
         {modalImage && <ImageModal imageUrl={modalImage} onClose={closeModal} />}
       </AnimatePresence>

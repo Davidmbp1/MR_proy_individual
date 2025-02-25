@@ -38,7 +38,6 @@ function Restaurants() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Inicializamos los filtros desde la query string (si existen)
   const initialRegion = searchParams.get('region') || '';
   const initialCuisine = searchParams.get('cuisine') || '';
   const initialPriceRange = searchParams.get('priceRange') || '';
@@ -49,20 +48,18 @@ function Restaurants() {
     ? searchParams.get('dietary')!.split(',')
     : [];
 
-  // Estados para los filtros
   const [region, setRegion] = useState(initialRegion);
   const [cuisine, setCuisine] = useState(initialCuisine);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>(initialFeatures);
   const [selectedDietary, setSelectedDietary] = useState<string[]>(initialDietary);
 
-  // Controla si mostramos el mapa o la lista
   const [showMap, setShowMap] = useState(false);
 
-  // Manejo de transiciones (opcional) para no bloquear la UI
   const [isPending, startTransition] = useTransition();
 
-  // Actualiza la URL con los filtros activos sin provocar un scroll o recarga completa
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
   useEffect(() => {
     const params: Record<string, string> = {};
     if (region) params.region = region;
@@ -74,12 +71,11 @@ function Restaurants() {
     setSearchParams(params, { replace: true });
   }, [region, cuisine, priceRange, selectedFeatures, selectedDietary, setSearchParams]);
 
-  // Vuelve a buscar los restaurantes cada vez que se modifican los filtros
   useEffect(() => {
     startTransition(() => {
       fetchRestaurants();
     });
-  }, [region, cuisine, priceRange, selectedFeatures, selectedDietary, startTransition]);
+  }, [region, cuisine, priceRange, selectedFeatures, selectedDietary]);
 
   const fetchRestaurants = () => {
     setLoading(true);
@@ -98,8 +94,9 @@ function Restaurants() {
     }
 
     const query = params.length ? `?${params.join('&')}` : '';
+
     axios
-      .get(`http://localhost:4000/api/restaurants${query}`)
+      .get(`${backendUrl}/api/restaurants${query}`)
       .then((res) => {
         setRestaurants(res.data);
         setLoading(false);
@@ -112,7 +109,6 @@ function Restaurants() {
       });
   };
 
-  // Toggle para cambiar entre vista de mapa y lista
   const handleToggleMap = () => {
     setShowMap(!showMap);
   };
@@ -124,13 +120,10 @@ function Restaurants() {
 
   return (
     <div>
-      {/* ScrollToTop se activa solo en cambios de ruta */}
       <ScrollToTop />
 
-      {/* Hero con la región seleccionada */}
       <RestaurantHero region={region} />
 
-      {/* Filtros top (región, cocina, precio) */}
       <FilterSection
         region={region}
         setRegion={setRegion}
@@ -142,14 +135,18 @@ function Restaurants() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex">
-          {/* Columna izquierda: Side filter + Botón "View Map", ambos sticky */}
-          <div className="
-            hidden md:block md:w-64 mr-4 
-            sticky top-24 self-start 
-            max-h-[calc(100vh-6rem)] 
-            overflow-y-auto 
-            flex flex-col gap-4
-          ">
+          <div
+            className="
+              hidden md:block md:w-64 mr-4 
+              sticky top-24 self-start 
+              max-h-[calc(100vh-6rem)] 
+              overflow-y-auto 
+              flex flex-col gap-4
+              bg-white
+              relative
+              z-10
+            "
+          >
             <button
               onClick={handleToggleMap}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full"
@@ -168,7 +165,6 @@ function Restaurants() {
             />
           </div>
 
-          {/* Columna derecha: Lista o Mapa */}
           <div className="flex-1">
             <div className={containerClass}>
               {loading && <p className="text-center py-8">Loading...</p>}

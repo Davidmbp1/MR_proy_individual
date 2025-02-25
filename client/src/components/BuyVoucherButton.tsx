@@ -6,21 +6,22 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 interface BuyVoucherButtonProps {
   offerId: string;
-  className?: string; // <- AÑADE LA PROPIEDAD AQUÍ
+  className?: string;
 }
 
 const BuyVoucherButton: React.FC<BuyVoucherButtonProps> = ({ offerId, className }) => {
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
   const handleBuy = async () => {
-    // Buscar el token (por ejemplo, en localStorage)
     const token = localStorage.getItem('token');
     if (!token) {
-      // Redirigir al login si no está autenticado
       window.location.href = '/login';
       return;
     }
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/checkout/create',
+        `${backendUrl}/api/checkout/create`,
         { offerId },
         {
           headers: {
@@ -44,7 +45,6 @@ const BuyVoucherButton: React.FC<BuyVoucherButtonProps> = ({ offerId, className 
   return (
     <button
       onClick={handleBuy}
-      // Combinas tus clases por defecto con las que recibas por props
       className={
         `bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ` +
         (className || '')

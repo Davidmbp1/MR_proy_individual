@@ -4,7 +4,7 @@
 
 describe('Login Flow', () => {
     beforeEach(() => {
-      // Usa la baseUrl definida en cypress.config.ts
+
       cy.visit('/login');
     });
   
@@ -13,13 +13,12 @@ describe('Login Flow', () => {
       cy.get('input[type="password"]').type('wrongpassword');
       cy.get('button[type="submit"]').click();
   
-      // Verifica que aparezca un mensaje de error
       cy.contains('Error in login').should('be.visible');
     });
   
     it('should login successfully with valid credentials', () => {
       // Usamos nuestro comando personalizado "cy.login"
-      cy.login('abranbullshit@gmail.com', 'abranbullshit');
+      cy.login('usuario@example.com', '123456');
   
       // Verifica redirección a la home
       cy.url().should('eq', 'http://localhost:5173/');

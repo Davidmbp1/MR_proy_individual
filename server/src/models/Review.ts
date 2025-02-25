@@ -3,11 +3,11 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
 export interface IReview extends Document {
-  user: Types.ObjectId;          // Referencia al usuario que escribe la reseña
-  restaurant: Types.ObjectId;    // Referencia al restaurante (o local) reseñado
-  rating: number;                // Calificación (de 1 a 5)
-  comment: string;               // Texto del comentario
-  images?: string[];             // Array opcional de URLs de imágenes
+  user: Types.ObjectId;          
+  restaurant: Types.ObjectId;    
+  rating: number;                
+  comment: string;               
+  images?: string[];             
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,7 +23,6 @@ const reviewSchema = new Schema<IReview>(
   { timestamps: true }
 );
 
-// Índice para búsquedas por restaurante y orden por fecha
 reviewSchema.index({ restaurant: 1, createdAt: -1 });
 
 export default model<IReview>('Review', reviewSchema);

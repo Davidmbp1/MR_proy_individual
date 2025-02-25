@@ -55,7 +55,6 @@ const SellerLanding: React.FC = () => {
         phone: '',
         message: '',
       });
-      // Redirigir al Home después de 3 segundos
       setTimeout(() => {
         navigate('/');
       }, 3000);
@@ -74,7 +73,6 @@ const SellerLanding: React.FC = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Columna Izquierda: Imagen + CTA */}
       <div className="relative md:flex-1 hidden md:block overflow-hidden">
         <img
           src={bgImageUrl}
@@ -107,7 +105,6 @@ const SellerLanding: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ delay: 0.5 }}
             onClick={() => {
-              // Acción al hacer clic
             }}
           >
             Learn More
@@ -115,7 +112,6 @@ const SellerLanding: React.FC = () => {
         </div>
       </div>
 
-      {/* Columna Derecha: Formulario */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 p-6 md:p-12">
         <div className="max-w-lg w-full bg-white rounded-lg shadow-xl p-8">
           <motion.h1
@@ -130,7 +126,6 @@ const SellerLanding: React.FC = () => {
             Fill out the form below to join our seller program.
           </p>
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Nombre */}
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-1">
                 <FaUser className="inline mr-1 text-gray-600" />
@@ -146,7 +141,6 @@ const SellerLanding: React.FC = () => {
                 required
               />
             </div>
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-1">
                 <FaRegEnvelope className="inline mr-1 text-gray-600" />
@@ -162,7 +156,6 @@ const SellerLanding: React.FC = () => {
                 required
               />
             </div>
-            {/* Business Name */}
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-1">
                 <FaBuilding className="inline mr-1 text-gray-600" />
@@ -178,7 +171,6 @@ const SellerLanding: React.FC = () => {
                 required
               />
             </div>
-            {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-1">
                 <FaPhoneAlt className="inline mr-1 text-gray-600" />
@@ -194,7 +186,6 @@ const SellerLanding: React.FC = () => {
                 required
               />
             </div>
-            {/* Message */}
             <div>
               <label className="block text-sm font-medium text-gray-800 mb-1">
                 Message

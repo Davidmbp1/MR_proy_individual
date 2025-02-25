@@ -14,7 +14,6 @@ function CompleteProfile() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Define una imagen de fondo para la columna derecha
   const backgroundImg =
     'https://www.youtotallygotthis.com/wp-content/uploads/2017/12/Last-Minute-Party-Snacks-Feature-Image-1080x608.jpg';
 
@@ -57,7 +56,6 @@ function CompleteProfile() {
 
   return (
     <div className="relative min-h-screen flex">
-      {/* Left Column */}
       <div className="w-full md:w-1/2 bg-white flex flex-col px-6 py-8">
         <button
           onClick={() => navigate('/')}
@@ -159,7 +157,6 @@ function CompleteProfile() {
           </form>
         </div>
       </div>
-      {/* Right Column: Background Image */}
       <div className="hidden md:flex md:w-1/2 relative">
         <div className="absolute top-4 right-4 z-40 cursor-pointer text-white">
           <FaTimes

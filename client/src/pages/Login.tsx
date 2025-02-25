@@ -28,7 +28,6 @@ function Login() {
       );
       const token = res.data.token;
       localStorage.setItem('token', token);
-      // Se espera que el backend retorne profileCompleted correctamente
       localStorage.setItem('profileCompleted', res.data.profileCompleted ? 'true' : 'false');
 
       setLoading(false);
@@ -36,7 +35,6 @@ function Login() {
       
       const redirectTo = (location.state as { from?: string })?.from || '/';
       if (res.data.profileCompleted !== true) {
-        // Redirige a CompleteProfile solo si el perfil no está completo
         setTimeout(() => {
           navigate('/complete-profile', { replace: true, state: { from: redirectTo } });
         }, 1500);
@@ -83,7 +81,6 @@ function Login() {
 
   return (
     <div className="relative min-h-screen flex">
-      {/* Columna Izquierda */}
       <div className="w-full md:w-1/2 bg-white flex flex-col justify-center px-6 py-8">
         <button
           onClick={() => navigate('/')}
@@ -159,7 +156,6 @@ function Login() {
         </div>
       </div>
 
-      {/* Columna Derecha: Imagen + overlay */}
       <div className="hidden md:flex md:w-1/2 relative">
         <div className="absolute top-4 right-4 z-40 cursor-pointer text-white">
           <FaTimes

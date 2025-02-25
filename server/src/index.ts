@@ -39,29 +39,27 @@ async function main() {
     })
   );
 
-  // Middleware para el webhook (antes de express.json)
   app.use('/webhook', express.raw({ type: 'application/json' }));
   app.use('/webhook', webhookRoutes);
 
   app.use(express.json());
 
-  // Servir archivos estáticos en /uploads
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-  // Rutas principales
+  // Rutas
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/restaurants', restaurantRoutes);
   app.use('/api/checkout', checkoutRoutes);
   app.use('/api/purchases', purchaseRoutes);
   app.use('/api/reviews', reviewRoutes);
-  app.use('/api/emails', emailRoutes);  // Ruta de correos
+  app.use('/api/emails', emailRoutes); 
 
   app.get('/', (req, res) => {
     res.send('Bienvenido a la API de Last Minute Foods!');
   });
 
-  // Creamos un servidor HTTP para usar con Socket.IO
+  // servidor HTTP
   const server = http.createServer(app);
   const io = new Server(server, {
     cors: {
@@ -71,7 +69,6 @@ async function main() {
     },
   });
 
-  // Guardamos la instancia de Socket.IO en la app para usarla en controladores
   app.set('socketio', io);
 
   server.listen(PORT, () => {

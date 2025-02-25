@@ -8,15 +8,11 @@ export interface IUser extends Document {
   name?: string;
   googleId?: string;
   role: string;
-
   promoCode?: string;
   agreeTerms?: boolean;
   contactPermission?: 'yes' | 'no';
-
   createdAt: Date;
   updatedAt: Date;
-
-  // Campo para la foto de perfil
   avatarUrl?: string;
 }
 

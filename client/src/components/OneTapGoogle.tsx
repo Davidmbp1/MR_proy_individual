@@ -9,7 +9,7 @@ declare global {
 }
 
 interface Props {
-  onSuccess?: (response: any) => void; // Ahora se espera un argumento
+  onSuccess?: (response: any) => void;
   onError?: (msg: string) => void;
 }
 
@@ -43,8 +43,6 @@ function OneTapGoogle({ onSuccess, onError }: Props) {
       });
       // Modo One Tap
       window.google.accounts.id.prompt();
-
-      // Renderiza el botón
       window.google.accounts.id.renderButton(
         document.getElementById('googleButtonDiv'),
         {

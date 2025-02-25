@@ -5,7 +5,6 @@ import { stripeWebhook } from '../controllers/webhook.controller';
 
 const router = express.Router();
 
-// Es MUY importante usar express.raw() para este endpoint, de modo que Stripe pueda verificar la firma
 router.post(
   '/stripe',
   express.raw({ type: 'application/json' }),

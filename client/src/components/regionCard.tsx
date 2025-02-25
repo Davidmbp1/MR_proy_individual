@@ -25,7 +25,7 @@ const RegionCard: React.FC<RegionCardProps> = ({ region, img }) => {
         hover:shadow-lg
       "
     >
-      {/* Imagen de fondo */}
+      
       <img
         src={img}
         alt={region}
@@ -42,7 +42,7 @@ const RegionCard: React.FC<RegionCardProps> = ({ region, img }) => {
           group-hover:scale-110
         "
       />
-      {/* Contenido superpuesto */}
+
       <div
         className="
           absolute

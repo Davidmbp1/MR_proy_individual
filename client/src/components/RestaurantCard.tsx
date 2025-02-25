@@ -30,7 +30,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   region,
   cuisine,
   rating,
-  // mainImage, // Usamos el fallback siempre
   priceRange,
   address,
   offers,
@@ -45,7 +44,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
       className="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden cursor-pointer"
     >
       <div className="md:flex">
-        {/* Imagen del restaurante */}
         <div className="md:w-1/3">
           <img
             src={fallbackImage}
@@ -54,7 +52,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
             style={{ minHeight: '192px' }}
           />
         </div>
-        {/* Información del restaurante */}
         <div className="p-4 md:w-2/3 flex flex-col justify-between">
           <div>
             <h3 className="text-2xl font-bold text-gray-800">{name}</h3>
@@ -91,7 +88,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
             {offers && offers.length > 0 && (
               <div className="mt-2">
                 <p className="text-sm text-green-600 font-semibold">
-                  Oferta disponible
+                  Offer available
                 </p>
               </div>
             )}
@@ -106,7 +103,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
                 }}
                 className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
               >
-                Ver Oferta
+                View Offer
               </button>
             )}
           </div>
