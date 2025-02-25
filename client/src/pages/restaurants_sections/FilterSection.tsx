@@ -1,4 +1,6 @@
-import React from 'react';
+// client/src/pages/restaurants_sections/FilterSection.tsx
+import React, { useEffect, useState } from 'react';
+import { FaMapMarkerAlt, FaUtensils, FaDollarSign } from 'react-icons/fa';
 
 interface FilterSectionProps {
   region: string;
@@ -15,46 +17,87 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   cuisine,
   setCuisine,
   priceRange,
-  setPriceRange,
+  setPriceRange
 }) => {
+  const [regionsList, setRegionsList] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/restaurants/regions')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setRegionsList(data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching regions:', err);
+      });
+  }, []);
+
+  const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRegion(e.target.value);
+  };
+
   return (
-    <section className="max-w-7xl mx-auto px-4 py-4 bg-gray-50 rounded shadow-sm mb-6">
-      <div className="flex flex-col md:flex-row gap-4">
+    <section className="max-w-7xl mx-auto px-6 py-6 bg-gradient-to-r from-blue-50 to-white border border-gray-200 rounded-lg shadow-md mb-8">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Filter Results</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Region */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Region</label>
-          <select 
-            value={region} 
-            onChange={(e) => setRegion(e.target.value)} 
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <FaMapMarkerAlt className="text-blue-500" />
+            <span>Region</span>
+          </label>
+          <select
+            value={region}
+            onChange={handleRegionChange}
+            className="block w-full border border-gray-300 bg-gray-50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900"
           >
             <option value="">All Regions</option>
-            <option value="London">London</option>
-            <option value="Lima">Lima</option>
-            <option value="New York">New York</option>
+            {regionsList.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
           </select>
         </div>
+
         {/* Cuisine */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Cuisine</label>
-          <select 
-            value={cuisine} 
-            onChange={(e) => setCuisine(e.target.value)} 
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <FaUtensils className="text-green-500" />
+            <span>Cuisine</span>
+          </label>
+          <select
+            value={cuisine}
+            onChange={(e) => setCuisine(e.target.value)}
+            className="block w-full border border-gray-300 bg-gray-50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-900"
           >
             <option value="">All Cuisines</option>
             <option value="Italian">Italian</option>
             <option value="Brazilian">Brazilian</option>
             <option value="Mexican">Mexican</option>
+            <option value="Peruvian">Peruvian</option>
+            <option value="Chinese">Chinese</option>
           </select>
         </div>
+
         {/* Price Range */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Price Range</label>
-          <select 
-            value={priceRange} 
-            onChange={(e) => setPriceRange(e.target.value)} 
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <FaDollarSign className="text-yellow-500" />
+            <span>Price Range</span>
+          </label>
+          <select
+            value={priceRange}
+            onChange={(e) => setPriceRange(e.target.value)}
+            className="block w-full border border-gray-300 bg-gray-50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-gray-900"
           >
             <option value="">Any</option>
             <option value="$">$</option>

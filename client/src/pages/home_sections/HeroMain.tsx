@@ -1,21 +1,40 @@
-// client/src/pages/sections/HeroMain.tsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function HeroMain() {
+  const navigate = useNavigate();
+  const [selectedRegion, setSelectedRegion] = useState('');
+
+  // Maneja el cambio en el <select>
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedRegion(e.target.value);
+  };
+
+  // Navega a la ruta correspondiente cuando se hace clic en el botón
+  const handleFindDeals = () => {
+    if (selectedRegion) {
+      navigate(`/restaurants?region=${selectedRegion}`);
+    } else {
+      alert('Por favor, selecciona una región antes de continuar.');
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center">
       {/* Imagen de fondo */}
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop"
-          alt="Hero background"
+          alt="Delicious food background"
           className="w-full h-full object-cover"
+          loading="lazy"
         />
       </div>
 
       {/* Gradiente para oscurecer la imagen y resaltar el texto */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/10 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40 z-10" />
 
-      {/* Ola inferior */}
+      {/* Ola inferior (color gris medio) */}
       <div className="absolute bottom-0 w-full z-20 pointer-events-none">
         <svg
           width="100%"
@@ -28,7 +47,7 @@ function HeroMain() {
             fillRule="evenodd"
             clipRule="evenodd"
             d="M800 54.0001C186 145 0 14.0001 0 14.0001V154H1600V14.0001C1600 14.0001 1555.81 1.88336 1439.4 0H1376.03C1251.01 1.84955 1065.53 14.6465 800 54.0001Z"
-            fill="#fff"
+            fill="#f3f4f6" 
           />
         </svg>
       </div>
@@ -45,77 +64,65 @@ function HeroMain() {
           "
           style={{
             WebkitTextStroke: '1px black', // Delineado negro
-            WebkitTextFillColor: 'white'   // Relleno blanco
+            WebkitTextFillColor: 'white',  // Relleno blanco
           }}
         >
-          {/* Primera línea */}
-          Dine early and save <br />
-          {/* Segunda línea con “50% off” en naranja */}
+          Don't let great food go to waste! <br />
           <span
             className="text-orange-400"
             style={{
-              WebkitTextStroke: '1px black', // Mantener el delineado
-              WebkitTextFillColor: 'orange'    // Relleno naranja para esta porción
+              WebkitTextStroke: '1px black',
+              WebkitTextFillColor: 'orange',
             }}
           >
-            50% off
+            Last Minute Deals
           </span>{' '}
-          your food bill
+          just for you
         </h1>
 
         <p className="mt-4 text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto text-white drop-shadow-lg">
-          Book a first table at thousands of restaurants and enjoy half price
-          on your meal for two, three, or four people!
+          Discover exclusive offers from top eateries and local markets before they're gone.
+          Enjoy delicious meals at unbeatable prices and help reduce food waste!
         </p>
 
-        {/* Controles (selector + botón) */}
+        {/* Selector y Botón con DaisyUI, ajustados para mayor tamaño y peso */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-          {/* Selector */}
+          {/* Etiqueta oculta para accesibilidad */}
+          <label htmlFor="region-select" className="sr-only">
+            Select a Region
+          </label>
           <select
+            id="region-select"
+            value={selectedRegion}
+            onChange={handleSelectChange}
             className="
-              border border-gray-300 
-              bg-white text-gray-700 
-              rounded-lg 
-              px-6 py-3 
-              shadow 
-              focus:outline-none 
-              focus:ring-2 
-              focus:ring-orange-500 
-              transition 
-              duration-200
-              text-base
+              select select-bordered select-warning 
+              select-lg            /* Tamaño grande */
+              font-bold text-lg    /* Negrita y texto más grande */
+              w-full max-w-xs
             "
           >
-            <option>Select a Region</option>
-            <option>Lima</option>
-            <option>Arequipa</option>
-            <option>Cusco</option>
+            <option value="">Select a Region</option>
+            <option value="Miraflores">Miraflores</option>
+            <option value="Barranco">Barranco</option>
+            <option value="San Isidro">San Isidro</option>
+            <option value="Chorrillos">Chorrillos</option>
+            <option value="La Molina">La Molina</option>
+            <option value="Surco">Surco</option>
+            <option value="Callao">Callao</option>
+            <option value="San Borja">San Borja</option>
+            <option value="Lince">Lince</option>
           </select>
 
-          {/* Botón con animación de elevación y sin transparencia */}
           <button
+            onClick={handleFindDeals}
             className="
-              bg-gradient-to-r 
-              from-orange-500 
-              to-orange-600 
-              text-white 
-              px-8 
-              py-3 
-              rounded-lg 
-              font-semibold 
-              shadow-lg 
-              transition-all
-              duration-200 
-              hover:-translate-y-1
-              hover:shadow-2xl 
-              hover:from-orange-600 
-              hover:to-orange-700
-              focus:outline-none 
-              focus:ring-2 
-              focus:ring-orange-500
+              btn btn-warning 
+              btn-lg             /* Tamaño grande */
+              font-bold text-lg  /* Negrita y texto más grande */
             "
           >
-            Find a table
+            Find Deals
           </button>
         </div>
       </div>

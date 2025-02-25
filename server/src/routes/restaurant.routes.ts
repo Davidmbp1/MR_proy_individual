@@ -1,6 +1,9 @@
+// server/src/routes/restaurant.routes.ts
 import { Router } from 'express';
 import {
   getAllRestaurants,
+  getAllRegions,
+  getFilters,
   getRestaurantById,
   createRestaurant,
   addOfferToRestaurant
@@ -8,8 +11,14 @@ import {
 
 const router = Router();
 
-// GET /api/restaurants
+// GET /api/restaurants (filtra con ?region=, etc.)
 router.get('/', getAllRestaurants);
+
+// GET /api/restaurants/regions
+router.get('/regions', getAllRegions);
+
+// GET /api/restaurants/filters
+router.get('/filters', getFilters);
 
 // GET /api/restaurants/:id
 router.get('/:id', getRestaurantById);

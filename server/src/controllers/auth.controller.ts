@@ -24,14 +24,15 @@ export const register: RequestHandler = async (req, res) => {
     // Hashear password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario
+    // Crear usuario; se asume que agreeTerms se guarda como false por defecto
     const newUser = await User.create({
       email,
       password: hashedPassword,
-      name
+      name,
+      agreeTerms: false
     });
 
-    // Generar token (mantener logueado)
+    // Generar token
     const token = jwt.sign(
       { userId: newUser._id, role: newUser.role },
       JWT_SECRET,
@@ -42,13 +43,11 @@ export const register: RequestHandler = async (req, res) => {
 
     res.status(201).json({
       message: 'Usuario registrado correctamente',
-      user: {
-        id: newUser._id,
-        email: newUser.email
-      },
-      token // Retornamos el JWT
+      user: { id: newUser._id, email: newUser.email },
+      token,
+      profileCompleted: false
     });
-    return; 
+    return;
   } catch (error) {
     logger.error('Error en register:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
@@ -68,7 +67,7 @@ export const login: RequestHandler = async (req, res) => {
       return;
     }
 
-    // Validar password
+    // Si el usuario se registró con Google (sin password)
     if (!user.password) {
       res.status(401).json({ message: 'Usuario registrado con Google, use Google Login' });
       return;
@@ -91,7 +90,8 @@ export const login: RequestHandler = async (req, res) => {
 
     res.json({
       message: 'Login exitoso',
-      token
+      token,
+      profileCompleted: user.agreeTerms === true
     });
     return;
   } catch (error) {
@@ -106,7 +106,7 @@ export const googleLogin: RequestHandler = async (req, res) => {
   try {
     const { token } = req.body;
 
-    // Verificar token con google
+    // Verificar token con Google
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID
@@ -130,11 +130,11 @@ export const googleLogin: RequestHandler = async (req, res) => {
       user = await User.create({
         email,
         googleId: sub,
-        name
+        name,
+        agreeTerms: false // Por defecto, perfil incompleto
       });
     } else if (!user.googleId) {
       user.googleId = sub || '';
-      // Asignar name si no tiene
       if (!user.name && name) {
         user.name = name;
       }
@@ -152,7 +152,8 @@ export const googleLogin: RequestHandler = async (req, res) => {
 
     res.json({
       message: 'Login con Google exitoso',
-      token: internalToken
+      token: internalToken,
+      profileCompleted: user.agreeTerms === true
     });
     return;
   } catch (error) {

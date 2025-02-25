@@ -1,5 +1,4 @@
-// client/src/components/RegionCard.tsx
-
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface RegionCardProps {
@@ -7,7 +6,7 @@ interface RegionCardProps {
   img: string;
 }
 
-export const RegionCard = ({ region, img }: RegionCardProps) => {
+const RegionCard: React.FC<RegionCardProps> = ({ region, img }) => {
   return (
     <Link
       to={`/restaurants?region=${encodeURIComponent(region)}`}
@@ -15,7 +14,7 @@ export const RegionCard = ({ region, img }: RegionCardProps) => {
         group
         block
         w-full
-        aspect-[4/3]        /* Mantiene una proporción 4:3 */
+        aspect-[4/3]
         relative
         overflow-hidden
         rounded-lg
@@ -26,7 +25,7 @@ export const RegionCard = ({ region, img }: RegionCardProps) => {
         hover:shadow-lg
       "
     >
-      {/* Imagen ocupando todo el contenedor */}
+      {/* Imagen de fondo */}
       <img
         src={img}
         alt={region}
@@ -43,7 +42,6 @@ export const RegionCard = ({ region, img }: RegionCardProps) => {
           group-hover:scale-110
         "
       />
-
       {/* Contenido superpuesto */}
       <div
         className="
