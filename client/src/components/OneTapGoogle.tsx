@@ -23,7 +23,7 @@ function OneTapGoogle({ onSuccess, onError }: Props) {
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
         { token }
       );
-      const { message, token: internalToken } = res.data;
+      const { token: internalToken } = res.data;
       localStorage.setItem('token', internalToken);
       if (onSuccess) onSuccess(response);
     } catch (error: any) {

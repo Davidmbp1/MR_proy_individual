@@ -1,5 +1,3 @@
-import React from 'react';
-
 function FooterSection() {
   return (
     <footer className="bg-blue-900 text-white mt-8">

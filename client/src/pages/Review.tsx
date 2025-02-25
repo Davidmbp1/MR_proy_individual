@@ -15,7 +15,7 @@ const Review: React.FC = () => {
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
     if (!restaurantId) {
