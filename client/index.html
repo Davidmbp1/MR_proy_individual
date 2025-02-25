@@ -5,6 +5,12 @@
     <title>LastMinuteFoods</title>
     <!-- Google Identity Services script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Desactiva la restauración automática del scroll -->
+    <script>
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

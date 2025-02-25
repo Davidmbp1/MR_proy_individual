@@ -4,18 +4,20 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IUser extends Document {
   email: string;
-  password?: string; // Para email/password
+  password?: string;
   name?: string;
   googleId?: string;
   role: string;
 
-  // Campos Extras
   promoCode?: string;
   agreeTerms?: boolean;
   contactPermission?: 'yes' | 'no';
 
   createdAt: Date;
   updatedAt: Date;
+
+  // Campo para la foto de perfil
+  avatarUrl?: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -25,11 +27,11 @@ const userSchema = new Schema<IUser>(
     name: { type: String },
     googleId: { type: String },
     role: { type: String, default: 'client' },
-
-    // Extras
     promoCode: { type: String },
     agreeTerms: { type: Boolean, default: false },
     contactPermission: { type: String, default: 'yes' },
+
+    avatarUrl: { type: String },
   },
   { timestamps: true }
 );
