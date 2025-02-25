@@ -1,23 +1,34 @@
-// client/src/components/Header.tsx
-
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaSearch } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaBars, FaTimes, FaSearch, FaUserCircle } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 
 function Header() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>('');
+
+  // Al iniciar sesión se deben guardar 'userAvatar' y 'userName' en localStorage
+  useEffect(() => {
+    if (token) {
+      const avatar = localStorage.getItem('userAvatar');
+      const name = localStorage.getItem('userName');
+      if (avatar) setUserAvatar(avatar);
+      if (name) setUserName(name);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userAvatar');
+    localStorage.removeItem('userName');
     navigate('/');
   };
 
   return (
     <header className="bg-white text-gray-900 border-b border-gray-200 shadow sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Fila principal */}
         <div className="flex items-center justify-between py-3">
           {/* LOGO */}
           <div className="flex items-center gap-2">
@@ -28,7 +39,6 @@ function Header() {
               LastMinute<span className="font-black">Foods</span>
             </NavLink>
           </div>
-
           {/* BOTÓN MENÚ MÓVIL */}
           <div className="md:hidden">
             <button
@@ -38,7 +48,6 @@ function Header() {
               {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
           </div>
-
           {/* BARRA DE BÚSQUEDA + MENÚ DESKTOP */}
           <div className="hidden md:flex md:items-center md:gap-6 flex-1 ml-4">
             {/* BÚSQUEDA */}
@@ -52,14 +61,12 @@ function Header() {
                 />
               </div>
             </div>
-
             {/* MENÚ DESKTOP */}
             <nav className="flex items-center gap-6 ml-auto">
               <NavLink
                 to="/faqs"
                 className={({ isActive }) =>
-                  'font-medium transition-colors hover:text-blue-600' +
-                  (isActive ? ' text-blue-600' : '')
+                  "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                 }
               >
                 FAQs
@@ -67,25 +74,31 @@ function Header() {
               <NavLink
                 to="/story"
                 className={({ isActive }) =>
-                  'font-medium transition-colors hover:text-blue-600' +
-                  (isActive ? ' text-blue-600' : '')
+                  "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                 }
               >
                 Our Story
               </NavLink>
-
               {token ? (
                 <>
-                  <button
-                    onClick={() => navigate('/profile')}
-                    className="font-medium transition-colors hover:text-blue-600"
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
+                    }
                   >
-                    Mi Perfil
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="font-medium transition-colors hover:text-blue-600"
-                  >
+                    {userAvatar ? (
+                      <img
+                        src={userAvatar.startsWith('/') ? `http://localhost:4000${userAvatar}` : userAvatar}
+                        alt="Avatar"
+                        className="w-8 h-8 rounded-full inline-block mr-2"
+                      />
+                    ) : (
+                      <FaUserCircle className="inline-block mr-2" />
+                    )}
+                    {userName || 'My Profile'}
+                  </NavLink>
+                  <button onClick={handleLogout} className="font-medium transition-colors hover:text-blue-600">
                     Logout
                   </button>
                 </>
@@ -94,8 +107,7 @@ function Header() {
                   <NavLink
                     to="/register"
                     className={({ isActive }) =>
-                      'font-medium transition-colors hover:text-blue-600' +
-                      (isActive ? ' text-blue-600' : '')
+                      "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                     }
                   >
                     Sign Up
@@ -103,21 +115,19 @@ function Header() {
                   <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                      'font-medium transition-colors hover:text-blue-600' +
-                      (isActive ? ' text-blue-600' : '')
+                      "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                     }
                   >
                     Login
                   </NavLink>
                 </>
               )}
-
-              {/* Cambiamos el texto a algo corto, p. ej: "Sell with LMF" */}
+              {/* Enlace para vendedores */}
               <NavLink
-                to="/restaurateurs"
+                to="/seller"
                 className={({ isActive }) =>
-                  'border border-gray-400 px-3 py-1 rounded hover:bg-gray-200 transition-colors font-medium' +
-                  (isActive ? ' text-blue-600' : '')
+                  "border border-gray-400 px-3 py-1 rounded hover:bg-gray-200 transition-colors font-medium" +
+                  (isActive ? " text-blue-600" : "")
                 }
               >
                 Sell with LMF
@@ -126,11 +136,9 @@ function Header() {
           </div>
         </div>
       </div>
-
       {/* MENÚ MÓVIL */}
       {mobileMenuOpen && (
         <nav className="md:hidden bg-white border-t border-gray-200 shadow-sm">
-          {/* BÚSQUEDA móvil */}
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-2 mx-4 mt-3 mb-2">
             <FaSearch className="text-gray-500 mr-2" />
             <input
@@ -139,15 +147,12 @@ function Header() {
               className="bg-transparent focus:outline-none flex-1 text-sm text-gray-700"
             />
           </div>
-
-          {/* Opciones de menú en columna */}
           <ul className="flex flex-col p-4 gap-3">
             <li>
               <NavLink
                 to="/faqs"
                 className={({ isActive }) =>
-                  'font-medium transition-colors hover:text-blue-600' +
-                  (isActive ? ' text-blue-600' : '')
+                  "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                 }
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -158,8 +163,7 @@ function Header() {
               <NavLink
                 to="/story"
                 className={({ isActive }) =>
-                  'font-medium transition-colors hover:text-blue-600' +
-                  (isActive ? ' text-blue-600' : '')
+                  "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                 }
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -176,7 +180,7 @@ function Header() {
                     }}
                     className="font-medium transition-colors hover:text-blue-600"
                   >
-                    Mi Perfil
+                    My Profile
                   </button>
                 </li>
                 <li>
@@ -197,8 +201,7 @@ function Header() {
                   <NavLink
                     to="/register"
                     className={({ isActive }) =>
-                      'font-medium transition-colors hover:text-blue-600' +
-                      (isActive ? ' text-blue-600' : '')
+                      "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                     }
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -209,8 +212,7 @@ function Header() {
                   <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                      'font-medium transition-colors hover:text-blue-600' +
-                      (isActive ? ' text-blue-600' : '')
+                      "font-medium transition-colors hover:text-blue-600" + (isActive ? " text-blue-600" : "")
                     }
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -221,10 +223,10 @@ function Header() {
             )}
             <li>
               <NavLink
-                to="/restaurateurs"
+                to="/seller"
                 className={({ isActive }) =>
-                  'border border-gray-400 px-4 py-2 rounded hover:bg-gray-200 transition-colors inline-block font-medium' +
-                  (isActive ? ' text-blue-600' : '')
+                  "border border-gray-400 px-4 py-2 rounded hover:bg-gray-200 transition-colors inline-block font-medium" +
+                  (isActive ? " text-blue-600" : "")
                 }
                 onClick={() => setMobileMenuOpen(false)}
               >

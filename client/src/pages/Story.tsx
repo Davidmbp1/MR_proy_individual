@@ -10,7 +10,7 @@ const heroBg =
 const originsImg =
   'https://f.hubspotusercontent20.net/hubfs/4363226/JohnWest_Hero-1.jpg';
 const missionImg =
-  'https://powerknot.com/wp-content/uploads/2023/07/corporate-sustainability-impact_2023-06-27b-1536x857.png';
+  'https://food.ec.europa.eu/sites/default/files/2024-08/fw_int-day_2024_3.png';
 const futureImg =
   'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&w=1600&q=80';
 

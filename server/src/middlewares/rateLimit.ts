@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // 5 intentos
+  max: 15, // 5 intentos
   message: {
     message: 'Demasiados intentos, intente más tarde.'
   },

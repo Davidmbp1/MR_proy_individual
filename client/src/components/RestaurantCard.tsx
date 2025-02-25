@@ -41,7 +41,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
 
   return (
     <div
-      onClick={() => navigate(`/restaurants/${_id}`)}
+      onClick={() => navigate(`/reviews/${_id}`)}
       className="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden cursor-pointer"
     >
       <div className="md:flex">

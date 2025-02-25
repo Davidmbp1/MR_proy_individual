@@ -1,4 +1,4 @@
-// client/src/pages/CompleteProfile.tsx
+// client/src/CompleteProfile.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -14,6 +14,7 @@ function CompleteProfile() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Define una imagen de fondo para la columna derecha
   const backgroundImg =
     'https://www.youtotallygotthis.com/wp-content/uploads/2017/12/Last-Minute-Party-Snacks-Feature-Image-1080x608.jpg';
 
@@ -26,13 +27,13 @@ function CompleteProfile() {
     e.preventDefault();
     setMessage('');
     if (!agreeTerms) {
-      setMessage('Debes aceptar los términos y condiciones para continuar.');
+      setMessage('You must accept the terms and conditions to continue.');
       return;
     }
     setLoading(true);
     const token = localStorage.getItem('token');
     if (!token) {
-      setMessage('No estás autenticado. Por favor inicia sesión.');
+      setMessage('Not authenticated. Please log in.');
       setLoading(false);
       return;
     }
@@ -42,7 +43,7 @@ function CompleteProfile() {
         { name, agreeTerms, contactPermission },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setMessage(res.data.message || 'Perfil actualizado correctamente.');
+      setMessage(res.data.message || 'Profile updated successfully.');
       setLoading(false);
       localStorage.setItem('userName', name);
       localStorage.setItem('profileCompleted', 'true');
@@ -50,13 +51,13 @@ function CompleteProfile() {
       navigate(redirectTo);
     } catch (err: any) {
       setLoading(false);
-      setMessage(err.response?.data?.message || 'Error al actualizar el perfil.');
+      setMessage(err.response?.data?.message || 'Error updating profile.');
     }
   };
 
   return (
     <div className="relative min-h-screen flex">
-      {/* Columna Izquierda */}
+      {/* Left Column */}
       <div className="w-full md:w-1/2 bg-white flex flex-col px-6 py-8">
         <button
           onClick={() => navigate('/')}
@@ -158,7 +159,7 @@ function CompleteProfile() {
           </form>
         </div>
       </div>
-      {/* Columna Derecha: Imagen + overlay */}
+      {/* Right Column: Background Image */}
       <div className="hidden md:flex md:w-1/2 relative">
         <div className="absolute top-4 right-4 z-40 cursor-pointer text-white">
           <FaTimes

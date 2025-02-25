@@ -6,7 +6,7 @@ import App from './App';
 import './index.css';
 import './leafletDefaultIcon'; // Importa la configuración de íconos
 
-// Desactiva la restauración automática del scroll del navegador
+// Desactiva la restauración automática del scroll
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
 }
