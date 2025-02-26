@@ -7,6 +7,3 @@ dist
 
 # Env
 .env
-
-# Archivo de credenciales (JSON)
-server/sample-426304-0c29daf9e2fd.json
