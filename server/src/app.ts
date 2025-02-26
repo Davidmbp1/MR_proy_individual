@@ -16,13 +16,7 @@ import emailRoutes from './routes/email.routes';
 import logger from './config/logger';
 
 dotenv.config();
-
-// Define los orígenes permitidos: usa la variable de entorno FRONTEND_URL y agrega tu dominio de producción
-const FRONTEND_URL = process.env.FRONTEND_URL;
-const allowedOrigins = [
-  FRONTEND_URL,
-  'https://mr-proy-individual.vercel.app'
-];
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 export async function createApp() {
   await connectDB();
@@ -35,18 +29,9 @@ export async function createApp() {
     })
   );
 
-  // Configura CORS permitiendo los orígenes definidos
   app.use(
     cors({
-      origin: (origin, callback) => {
-        // Permitir solicitudes sin origin (por ejemplo, desde herramientas de testing)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-          return callback(null, true);
-        } else {
-          return callback(new Error(`Origin ${origin} not allowed by CORS`));
-        }
-      },
+      origin: [FRONTEND_URL],
       credentials: true,
     })
   );
@@ -55,7 +40,6 @@ export async function createApp() {
   app.use('/webhook', express.raw({ type: 'application/json' }));
   app.use('/webhook', webhookRoutes);
 
-  // Middleware para parsear JSON
   app.use(express.json());
 
   // Sirve archivos estáticos (por ejemplo, imágenes subidas)
@@ -70,7 +54,6 @@ export async function createApp() {
   app.use('/api/reviews', reviewRoutes);
   app.use('/api/emails', emailRoutes);
 
-  // Ruta raíz de prueba
   app.get('/', (req, res) => {
     res.send('Bienvenido a la API de Last Minute Foods!');
   });
