@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
 import logger from '../config/logger';
-import { bucket } from '../config/googleCloudStorage';
+import { bucketPromise } from '../config/googleCloudStorage';
 
 type MulterRequest = Request & {
   file?: Express.Multer.File;
@@ -21,11 +21,9 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     res.json({ user });
-    return;
   } catch (error) {
     logger.error('Error en getUser:', error);
     res.status(500).json({ message: 'Error interno al obtener datos del usuario' });
-    return;
   }
 };
 
@@ -59,11 +57,9 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
         contactPermission: user.contactPermission,
       },
     });
-    return;
   } catch (error) {
     logger.error('Error en updateProfile:', error);
     res.status(500).json({ message: 'Error interno al actualizar perfil' });
-    return;
   }
 };
 
@@ -85,20 +81,23 @@ export const updateAvatar = async (req: MulterRequest, res: Response): Promise<v
     }
     const { originalname, buffer, mimetype } = req.file;
     const filename = `${Date.now()}_${originalname}`;
+
+    // Espera a obtener el bucket desde el secret manager
+    const bucket = await bucketPromise;
     const file = bucket.file(filename);
 
-    // Agregamos resumable: false para evitar problemas en entornos serverless y con uniform bucket-level access
     const stream = file.createWriteStream({
       metadata: { contentType: mimetype },
       resumable: false,
     });
 
-    stream.on('error', (err) => {
+    stream.on('error', (err: any) => {
       logger.error('Error al subir archivo a GCS:', err);
       res.status(500).json({ message: 'Error uploading avatar. Please try again.' });
     });
     stream.on('finish', async () => {
-      // Con uniform bucket-level access no podemos modificar ACLs, por lo que el bucket debe estar configurado para permitir lectura pública (rol "Storage Object Viewer" para allUsers).
+      // Con uniform bucket-level access no se pueden modificar ACLs; el bucket debe estar configurado
+      // para que allUsers tengan el rol "Storage Object Viewer"
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
       user.avatarUrl = publicUrl;
       await user.save();
@@ -109,6 +108,5 @@ export const updateAvatar = async (req: MulterRequest, res: Response): Promise<v
   } catch (error) {
     logger.error('Error en updateAvatar:', error);
     res.status(500).json({ message: 'Error interno al subir avatar' });
-    return;
   }
 };

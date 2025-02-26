@@ -1,27 +1,33 @@
+// server/src/controllers/review.controller.ts
 import { Request, Response, RequestHandler } from 'express';
 import Review, { IReview } from '../models/Review';
 import logger from '../config/logger';
-import { bucket } from '../config/googleCloudStorage';
+import { bucketPromise } from '../config/googleCloudStorage';
 
 type MulterRequest = Request & {
   files?: Express.Multer.File[];
 };
 
-const uploadFileToGCS = (file: Express.Multer.File): Promise<string> => {
+const uploadFileToGCS = async (file: Express.Multer.File): Promise<string> => {
+  const { originalname, buffer, mimetype } = file;
+  const filename = `${Date.now()}_${originalname}`;
+  
+  // Espera a obtener el bucket de Google Cloud Storage
+  const bucket = await bucketPromise;
+  const fileUpload = bucket.file(filename);
+
   return new Promise((resolve, reject) => {
-    const { originalname, buffer, mimetype } = file;
-    const filename = `${Date.now()}_${originalname}`;
-    const fileUpload = bucket.file(filename);
     const stream = fileUpload.createWriteStream({
       metadata: { contentType: mimetype },
+      resumable: false,
     });
     stream.on('error', (err) => {
       logger.error('Error al subir archivo a GCS:', err);
       reject(err);
     });
-    stream.on('finish', async () => {
-      // No usamos makePublic() debido a uniform bucket-level access.
-      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`;
+    stream.on('finish', () => {
+      // Con Uniform Bucket-Level Access, el bucket debe estar configurado para que allUsers tengan el rol "Storage Object Viewer".
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`;
       resolve(publicUrl);
     });
     stream.end(buffer);
@@ -63,11 +69,9 @@ export const createReview = (async (req: MulterRequest, res: Response): Promise<
     }
 
     res.status(201).json({ review });
-    return;
   } catch (error) {
     logger.error('Error creating review:', error);
     res.status(500).json({ message: 'Internal error while creating review' });
-    return;
   }
 }) as RequestHandler;
 
@@ -82,11 +86,9 @@ export const getReviewsByRestaurant: RequestHandler = async (req, res) => {
       .populate('user', 'name avatarUrl email')
       .sort({ createdAt: -1 });
     res.json({ reviews });
-    return;
   } catch (error) {
     logger.error('Error fetching reviews:', error);
     res.status(500).json({ message: 'Internal error while fetching reviews' });
-    return;
   }
 };
 
@@ -120,11 +122,9 @@ export const updateReview: RequestHandler = async (req, res) => {
     }
 
     res.json({ review });
-    return;
   } catch (error) {
     logger.error('Error updating review:', error);
     res.status(500).json({ message: 'Internal error while updating review' });
-    return;
   }
 };
 
@@ -154,10 +154,8 @@ export const deleteReview: RequestHandler = async (req, res) => {
     }
 
     res.json({ message: 'Review deleted successfully' });
-    return;
   } catch (error) {
     logger.error('Error deleting review:', error);
     res.status(500).json({ message: 'Internal error while deleting review' });
-    return;
   }
 };
