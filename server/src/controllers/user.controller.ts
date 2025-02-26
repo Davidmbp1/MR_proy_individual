@@ -1,3 +1,4 @@
+// server/src/controllers/user.controller.ts
 import { Request, Response } from 'express';
 import User from '../models/user';
 import logger from '../config/logger';
@@ -85,16 +86,19 @@ export const updateAvatar = async (req: MulterRequest, res: Response): Promise<v
     const { originalname, buffer, mimetype } = req.file;
     const filename = `${Date.now()}_${originalname}`;
     const file = bucket.file(filename);
+
+    // Agregamos resumable: false para evitar problemas en entornos serverless y con uniform bucket-level access
     const stream = file.createWriteStream({
       metadata: { contentType: mimetype },
+      resumable: false,
     });
+
     stream.on('error', (err) => {
       logger.error('Error al subir archivo a GCS:', err);
       res.status(500).json({ message: 'Error uploading avatar. Please try again.' });
     });
     stream.on('finish', async () => {
-      // Con Uniform Bucket-Level Access, no se puede usar makePublic.
-      // Por ello, debes haber configurado el bucket en IAM para permitir que allUsers tengan el rol "Storage Object Viewer"
+      // Con uniform bucket-level access no podemos modificar ACLs, por lo que el bucket debe estar configurado para permitir lectura pública (rol "Storage Object Viewer" para allUsers).
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
       user.avatarUrl = publicUrl;
       await user.save();
