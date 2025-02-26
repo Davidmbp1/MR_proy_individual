@@ -35,13 +35,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   offers,
   venueType,
 }) => {
-  const fallbackImage = 'https://www.abasturhub.com/img/blog/mejores-restaurantes---diseno-sin-titulo.jpg';
+  const fallbackImage =
+    'https://www.abasturhub.com/img/blog/mejores-restaurantes---diseno-sin-titulo.jpg';
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate(`/reviews/${_id}`)}
-      className="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden cursor-pointer"
+      // Quitamos el onClick para evitar navegar a la sección de reseñas
+      className="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden cursor-default"
     >
       <div className="md:flex">
         <div className="md:w-1/3">
