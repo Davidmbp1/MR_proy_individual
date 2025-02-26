@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import CompleteProfile from './pages/CompleteProfile'; 
+import CompleteProfile from './pages/CompleteProfile';
 import Restaurants from './pages/Restaurants';
 import OfferDetail from './pages/OfferDetail';
 import CheckoutSuccess from './pages/CheckoutSuccess';
@@ -26,21 +26,15 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* Autenticación */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* Perfil */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
-        {/* Restaurantes */}
         <Route path="/restaurants" element={<Restaurants />} />
         <Route path="/restaurants/:restaurantId/offer/:offerId" element={<OfferDetail />} />
-        {/* Checkout */}
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
-        {/* Reseñas */}
         <Route path="/reviews/:restaurantId" element={<Review />} />
-        {/* Otras secciones */}
         <Route path="/faqs" element={<Faq />} />
         <Route path="/story" element={<Story />} />
         <Route path="/seller" element={<SellerLanding />} />
