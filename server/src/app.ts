@@ -1,3 +1,4 @@
+// server/src/app.ts
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -15,39 +16,54 @@ import emailRoutes from './routes/email.routes';
 import logger from './config/logger';
 
 dotenv.config();
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+// Lista de URLs permitidos para el frontend
+const allowedFrontends = [
+  'https://mr-proy-individual.vercel.app',
+  'https://mr-proy-individual-7eh962xtj-david-bustos-projects.vercel.app',
+  'https://mr-proy-individual-git-main-david-bustos-projects.vercel.app'
+];
 
 export async function createApp() {
   await connectDB();
 
   const app = express();
 
-  // Helmet con política de recursos cross-origin
+  // Helmet con política cross-origin
   app.use(
     helmet({
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     })
   );
 
-  // Configuración de CORS: permite el origen de desarrollo y producción
+  // Configuración de CORS
   app.use(
     cors({
-      origin: [FRONTEND_URL, 'https://mr-proy-individual.vercel.app'],
+      origin: (origin, callback) => {
+        // Permitir peticiones sin origen (por ejemplo, herramientas de testing o llamadas server-to-server)
+        if (!origin) return callback(null, true);
+        // Si el origen está en la lista de permitidos, lo acepta
+        if (allowedFrontends.includes(origin)) {
+          return callback(null, true);
+        }
+        // En caso contrario, rechaza la petición
+        return callback(new Error('Not allowed by CORS'));
+      },
       credentials: true,
     })
   );
 
-  // Montamos el middleware para el webhook antes de express.json()
+  // Middleware para el webhook: se monta antes del body-parser JSON
   app.use('/webhook', express.raw({ type: 'application/json' }));
   app.use('/webhook', webhookRoutes);
 
-  // Parser de JSON
+  // Middleware para parsear JSON en el resto de rutas
   app.use(express.json());
 
-  // Servir la carpeta uploads como estático (para imágenes subidas)
+  // Servir archivos estáticos (por ejemplo, imágenes subidas por Multer)
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-  // Rutas de la API
+  // Montar las rutas de la API
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/restaurants', restaurantRoutes);
@@ -56,6 +72,7 @@ export async function createApp() {
   app.use('/api/reviews', reviewRoutes);
   app.use('/api/emails', emailRoutes);
 
+  // Ruta raíz
   app.get('/', (req, res) => {
     res.send('Bienvenido a la API de Last Minute Foods!');
   });
