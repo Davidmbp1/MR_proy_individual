@@ -18,7 +18,7 @@ import logger from './config/logger';
 dotenv.config();
 
 // Define los orígenes permitidos: usa la variable de entorno FRONTEND_URL y agrega tu dominio de producción
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL = process.env.FRONTEND_URL;
 const allowedOrigins = [
   FRONTEND_URL,
   'https://mr-proy-individual.vercel.app'
