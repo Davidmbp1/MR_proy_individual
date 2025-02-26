@@ -1,4 +1,3 @@
-// server/src/app.ts
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -23,26 +22,29 @@ export async function createApp() {
 
   const app = express();
 
+  // Helmet con política de recursos cross-origin
   app.use(
     helmet({
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     })
   );
 
+  // Configuración de CORS: permite el origen de desarrollo y producción
   app.use(
     cors({
-      origin: [FRONTEND_URL],
+      origin: [FRONTEND_URL, 'https://mr-proy-individual.vercel.app'],
       credentials: true,
     })
   );
 
-  // Middleware para webhook (raw body)
+  // Montamos el middleware para el webhook antes de express.json()
   app.use('/webhook', express.raw({ type: 'application/json' }));
   app.use('/webhook', webhookRoutes);
 
+  // Parser de JSON
   app.use(express.json());
 
-  // Sirve archivos estáticos (por ejemplo, imágenes subidas)
+  // Servir la carpeta uploads como estático (para imágenes subidas)
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
   // Rutas de la API
