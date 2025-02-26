@@ -43,14 +43,14 @@ function OneTapGoogle({ onSuccess, onError }: Props) {
       });
       // Modo One Tap
       window.google.accounts.id.prompt();
-      window.google.accounts.id.renderButton(
-        document.getElementById('googleButtonDiv'),
-        {
+      const googleButtonDiv = document.getElementById('googleButtonDiv');
+      if (googleButtonDiv) {
+        window.google.accounts.id.renderButton(googleButtonDiv, {
           theme: 'outline',
           size: 'large',
           text: 'continue_with',
-        }
-      );
+        });
+      }
     }
   }, [clientId]);
 
