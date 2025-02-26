@@ -1,4 +1,3 @@
-// server/src/config/googleCloudStorage.ts
 import { Storage } from '@google-cloud/storage';
 import { getGoogleCloudCredentials } from './secretManager';
 
@@ -16,9 +15,8 @@ async function createBucket() {
   const credentials = await getGoogleCloudCredentials();
   const storage = new Storage({
     projectId: GOOGLE_CLOUD_PROJECT_ID,
-    credentials: credentials,
+    credentials,
   });
-  // Usamos "!" para indicar que BUCKET_NAME no es undefined
   return storage.bucket(BUCKET_NAME!);
 }
 

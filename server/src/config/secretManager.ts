@@ -1,7 +1,10 @@
-// server/src/config/secretManager.ts
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 
-const client = new SecretManagerServiceClient();
+const clientConfig = process.env.GOOGLE_CLOUD_CREDENTIALS
+  ? { credentials: JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS) }
+  : {};
+
+const client = new SecretManagerServiceClient(clientConfig);
 
 export async function getGoogleCloudCredentials(): Promise<any> {
   const [version] = await client.accessSecretVersion({
@@ -11,6 +14,5 @@ export async function getGoogleCloudCredentials(): Promise<any> {
   if (!payload) {
     throw new Error('Failed to access secret payload');
   }
-  // Si payload es un Buffer o ya es string, toString() sin argumentos es suficiente
   return JSON.parse(payload.toString());
 }
