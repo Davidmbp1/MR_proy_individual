@@ -17,6 +17,9 @@ const CheckoutSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id') || '';
+  
+  // Logs para depurar el session_id recibido
+  console.log('Session ID recibido:', sessionId);
 
   const [purchase, setPurchase] = useState<IPurchase | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,20 +31,31 @@ const CheckoutSuccess: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
+      console.error('Token no encontrado en localStorage');
       setError('No user authenticated. Please log in.');
       setLoading(false);
       return;
     }
+    console.log('Token encontrado:', token);
+
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    if (!backendUrl) {
+      console.error('VITE_BACKEND_URL no está definido');
+      setError('Backend URL not defined.');
+      setLoading(false);
+      return;
+    }
+    console.log('Backend URL:', backendUrl);
 
     const fetchPurchase = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/purchases/by-session/${sessionId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const url = `${backendUrl}/api/purchases/by-session/${sessionId}`;
+        console.log('Realizando GET a:', url);
+        const res = await axios.get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('Respuesta de purchase:', res.data);
         setPurchase(res.data.purchase);
       } catch (err: any) {
         console.error('Error fetching purchase:', err);
@@ -54,6 +68,7 @@ const CheckoutSuccess: React.FC = () => {
     if (sessionId) {
       fetchPurchase();
     } else {
+      console.error('No session_id received in URL');
       setError('No session_id received in the URL.');
       setLoading(false);
     }
