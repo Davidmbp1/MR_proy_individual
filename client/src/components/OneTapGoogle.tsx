@@ -14,7 +14,7 @@ interface Props {
 }
 
 function OneTapGoogle({ onSuccess, onError }: Props) {
-  const clientId = import.meta.env.GOOGLE_CLIENT_ID || '';
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
   const handleCredentialResponse = async (response: any) => {
     const token = response.credential;
